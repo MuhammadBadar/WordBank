@@ -1,0 +1,25 @@
+<p>Inside Vocabulary Component</p>
+<div>
+    Word is : {{word}}
+    
+</div>
+<div>
+    Sum is: {{ x + y}}
+</div>
+<div>
+    <b>Class/Interface Variables</b>
+    <hr/>
+</div>
+<div>
+    Id: {{ vocab.Id}}
+    <br/>
+    Word: {{ vocab.word | uppercase}} <br/>
+    Meaning: {{ vocab.meaning | lowercase}}
+</div>
+<hr/>
+<div>
+    Word: <input type="text" id="txtWord" [(ngModel)] = "vocab.word" name="txtWord" />
+</div>
+<div>
+    <input type="button" id="btnSubmit" name="btnSubmit" value="Submit" (click)="saveForm()" />
+</div>

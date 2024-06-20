@@ -1,0 +1,131 @@
+
+<div class="container-fluid page">
+    <div class="d-flex page_box p-3 mt-2 header-sticky" style="position: sticky;">
+        <div *ngIf="Add"><H3>Manage Appointment</H3></div>
+        <div *ngIf="Edit">Edit Appointment</div>
+
+    </div>
+</div>
+<div class="page_content shadow p-3 position-relative">
+    <form #AppointmentForm="ngForm">
+        <div fxLayout="row" fxLayoutAlign="space-between">
+
+          <!--   <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                <mat-label>Id</mat-label>
+                <input matInput required #id="ngModel" type="number" name="id"
+                    [(ngModel)]="selectedAppointment.id">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                <mat-label>InquiryId</mat-label>
+                <input matInput required #inquiryId="ngModel" type="number" name="inquiryId"
+                    [(ngModel)]="selectedAppointment.inquiryId">
+            </mat-form-field> -->
+
+            <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                <mat-label>StatusId</mat-label>
+                <input matInput required #statusId="ngModel" name="statusId" [(ngModel)]="selectedAppointment.statusId">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                <mat-label>NextApptDate</mat-label>
+                <input matInput required #nextApptDate="ngModel" name="nextApptDate"
+                    [(ngModel)]="selectedAppointment.nextApptDate">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                <mat-label>comment</mat-label>
+                <input matInput required #comment="ngModel" name="comment" rows="5"
+                    [(ngModel)]="selectedAppointment.comment" max="9999" min="0">
+            </mat-form-field>
+
+
+        </div>
+
+
+
+        <mat-checkbox name="isActive" [(ngModel)]="selectedAppointment.isActive">Is Active</mat-checkbox>
+
+        <div fxLayoutAlign="end end">
+
+
+            <div style="margin-top: 10px;">
+
+                <button *ngIf="Add" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
+                    (click)="SaveAppointment();">
+                    Save
+                </button>
+                <button *ngIf="Edit" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
+                    (click)="UpdateAppointment()">
+                    Update
+                </button>
+            </div>
+            <div>
+                <button mat-icon-button mat-sm-button color="primary" cTooltip="Refresh" cTooltipPlacement="top"
+                    (click)="ngOnInit()">
+                    <mat-icon>autorenew</mat-icon>
+                </button>
+            </div>
+        </div>
+    </form>
+    <c-card style="padding: 10px; margin-top: 30px;" class="mat-elevation-z8">
+        <h5 cCardTitle>Appointment List</h5>
+       
+        <c-card-body style="padding: 10px;margin: 5px;border-radius: 10px;">
+            <div class="example-table-container">
+                <section class="example-container mat-elevation-z8" tabindex="0" style="border-radius: 5px;">
+                    <table mat-table [dataSource]=" DataSource" class="mat-elevation-z8">
+
+                        <ng-container matColumnDef="inquiryId">
+                            <th mat-header-cell *matHeaderCellDef> InquiryId </th>
+                            <td mat-cell *matCellDef="let app"> {{app.inquiryId}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="statusId">
+                            <th mat-header-cell *matHeaderCellDef> StatusId </th>
+                            <td mat-cell *matCellDef="let app"> {{app.statusId}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="nextApptDate">
+                            <th mat-header-cell *matHeaderCellDef> NextApptDate </th>
+                            <td mat-cell *matCellDef="let app"> {{app.nextApptDate}} </td>
+                        </ng-container>
+                    
+                        <ng-container matColumnDef="comment">
+                            <th mat-header-cell *matHeaderCellDef> Comment </th>
+                            <td mat-cell *matCellDef="let app"> {{app.comment}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="isActive">
+                            <th mat-header-cell *matHeaderCellDef> Is Active </th>
+                            <td mat-cell *matCellDef="let app"> {{ app.isActive ? 'yes' :
+                                'no' }} </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="actions" stickyEnd>
+                            <th mat-header-cell *matHeaderCellDef style="width: 100px; text-align: center;"> Actions
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                <div style="width: 100px;">
+                                    <button mat-icon-button mat-sm-button style="color:#1e293b ; "
+                                        cTooltip=" Edit  Appointment " (click)="GetAppointmentForEdit(row.id)">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button mat-icon-button mat-sm-button matTooltip="Delete Appointment" color="warn"
+                                        (click)="DeleteAppointment(row.id)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+
+
+                                </div>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                    </table>
+                </section>
+            </div>
+        </c-card-body>
+    </c-card>
+   

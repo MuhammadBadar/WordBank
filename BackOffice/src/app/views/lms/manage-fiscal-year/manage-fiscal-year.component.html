@@ -1,0 +1,155 @@
+<div class="container-fluid page">
+    <div class="d-flex page_box p-3 mt-2  header-sticky" position="sticky">
+        <div *ngIf="Add">Manage FiscalYear
+        </div>
+
+    </div>
+
+    <form>
+        <div class="page_content shadow p-3 position-relative">
+            <form #FiscalYearForm="ngForm">
+                <div fxLayout="row" fxLayoutAlign="space-between">
+
+                    <div fxFlex="48%" appearance="outline" class="form-group" >
+                        <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                            <mat-label>YearCode</mat-label>
+                            <input matInput required #yearCode="ngModel" name="yearCode"
+                                [(ngModel)]="selectedFiscalYear.yearCode" />
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="48%" appearance="outline" class="form-group" >
+                        <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                            <mat-label>YearDesc</mat-label>
+
+                            <textarea matInput required #yearDesc="ngModel" name="yearDesc"
+                                [(ngModel)]="selectedFiscalYear.yearDesc"> </textarea>
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="space-between">
+
+                    <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                        <mat-label>YearDateFrom</mat-label>
+                        <input matInput [matDatepicker]="picker1" name="yearDateFrom" readonly="true"
+                        #yearDateFrom="ngModel" [(ngModel)]="selectedFiscalYear.yearDateFrom " required=" true">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                     
+                    </mat-form-field>
+
+                    <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                        <mat-label>yearDateTo</mat-label>
+                        <input matInput [matDatepicker]="picker2" name="yearDateTo" readonly="true"
+                        #yearDateTo="ngModel" [(ngModel)]="selectedFiscalYear.yearDateTo " required=" true">
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                        <!-- <mat-label>YearDateTo</mat-label>
+                    <input type="date" matInput required #yearDateTo="ngModel" name="yearDateTo"  [(ngModel)]="selectedFiscalYear.yearDateTo" /> -->
+                    </mat-form-field>
+                </div>
+                    <br><br>
+
+                    <div class="container-fluid">
+                        <mat-label>IsActiveYear</mat-label>
+                        <br><br>
+                        <input required #isActiveYear="ngModel" id="isActiveYear" name="isActiveYear" type="checkbox"
+                            [(ngModel)]="selectedFiscalYear.isActiveYear" />
+
+                    </div>
+
+
+                    <!--    <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                    <mat-label>IsActiveYear</mat-label>
+                    <input matInput required #isActiveYear="ngModel"  id="isActiveYear" name="isActiveYear" type="checkbox" [(ngModel)]="selectedFiscalYear.isActiveYear" />
+                  
+                </mat-form-field> -->
+                </div>
+
+                <br><br>
+                <div class="page_content shadow p-3 position-relative">
+                    <form #FiscalYearForm="ngForm">
+
+
+
+
+                        <mat-checkbox name="isActive" [(ngModel)]="selectedFiscalYear.isActive">Is Active</mat-checkbox>
+                        <div fxLayoutAlign="end end">
+                            <button mat-raised-button *ngIf="AddMode" color="primary"
+                                (click)="SaveFiscalYear()">Submit</button>
+                            <button mat-raised-button *ngIf="EditMode" color="primary"
+                                (click)="UpdateFiscalYear()">Update</button>
+                        </div>
+
+                    </form>
+
+
+                    <c-card style="padding: 10px; margin-top: 30px;" class="mat-elevation-z8">
+                        <h5 cCardTitle>FiscalYear List</h5>
+                        <c-card-body style="padding: 10px;margin: 5px;border-radius: 10px;">
+                            <div class="example-table-container">
+                                <section class="example-container mat-elevation-z8" tabindex="0"
+                                    style="border-radius: 5px;">
+                                    <table mat-table [dataSource]=" DataSource" class="mat-elevation-z8">
+
+                                        <ng-container matColumnDef="yearCode">
+                                            <th mat-header-cell *matHeaderCellDef> YearCode </th>
+                                            <td mat-cell *matCellDef="let FiscalYear"> {{FiscalYear.yearCode}} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="yearDesc">
+                                            <th mat-header-cell *matHeaderCellDef> YearDesc </th>
+                                            <td mat-cell *matCellDef="let FiscalYear"> {{FiscalYear.yearDesc}} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="yearDateFrom">
+                                            <th mat-header-cell *matHeaderCellDef> YearDateFrom </th>
+                                            <td mat-cell *matCellDef="let FiscalYear"> {{FiscalYear.yearDateFrom}} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="yearDateTo">
+                                            <th mat-header-cell *matHeaderCellDef> YearDateTo </th>
+                                            <td mat-cell *matCellDef="let FiscalYear"> {{FiscalYear.yearDateTo}} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="isActiveYear">
+                                            <th mat-header-cell *matHeaderCellDef> IsActiveYear </th>
+                                            <td mat-cell *matCellDef="let FiscalYear"> {{FiscalYear.isActiveYear ? 'yes'
+                                                : 'no'}} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="isActive">
+                                            <th mat-header-cell *matHeaderCellDef> Is Active </th>
+                                            <td mat-cell *matCellDef="let FiscalYear"> {{ FiscalYear.isActive ? 'yes' :
+                                                'no' }} </td>
+                                        </ng-container>
+
+                                        <!-- <ng-container matColumnDef="actions" stickyEnd="true">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <p style="font-size: 14px;text-align: center;">Action</p>
+                                            </th>
+                                            <td mat-cell *matCellDef="let FiscalYear"> </td>
+                                            
+
+                                        </ng-container> -->
+                                        <ng-container matColumnDef="actions" stickyEnd>
+                                            <th mat-header-cell *matHeaderCellDef
+                                                style="width: 100px; text-align: center;"> Actions
+                                            </th>
+                                            <td mat-cell *matCellDef="let row">
+                                                <div style="width: 100px;">
+                                                    <button mat-icon-button mat-sm-button style="color:#1e293b ; "
+                                                        cTooltip=" Update FiscalYear " (click)="UpdateFiscalYear()">
+                                                        <mat-icon>update</mat-icon>
+                                                    </button>
+
+
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <tr mat-header-row *matHeaderRowDef="fisyColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: fisyColumns;"></tr>
+
+                                    </table>
+                                </section>
+                            </div>
+                        </c-card-body>
+                    </c-card>
+                </div>
+            </form>
+
+        </div>
+    </form>

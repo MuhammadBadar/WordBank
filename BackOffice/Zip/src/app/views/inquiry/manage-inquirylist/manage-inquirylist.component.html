@@ -1,0 +1,77 @@
+<div class="container-fluid page">
+  <div class="d-flex page_box p-3 mt-2  header-sticky" position="sticky">
+      <div >  InquiryList
+      </div>
+     <!--  <div fxFlex fxLayout="row" fxLayoutAlign="end center" style="margin-top: 0; padding-top: 0;" >
+        <button mat-icon-button style="color: white; margin-top: 0; padding-top: 0;" 
+            (click)="dialogRefe.close()"
+            aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+      </div> -->
+     
+  </div>
+  <div class="page_content shadow p-3 position-relative">
+<div style="margin-top: 30px;text-align: right;margin-right: 10px;">
+  <button style="color: white;" mat-raised-button class="mb-05" matTooltip="Create new Inquiry" color="primary"
+    [routerLink]="['/inquiry/manage-inquiry']"   >Create Inquiry</button>
+
+</div>
+<div class="example-table-container" style=" overflow-x: scroll;margin-top: 20px; ">
+  <table mat-table #table [dataSource]="dataSource">
+    <ng-container matColumnDef="id" id="id">
+      <th mat-header-cell *matHeaderCellDef style="width: 10px;">SrNo </th>
+      <td mat-cell *matCellDef="let inqlist" style="width: 10px;"> {{inqlist.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="inquiryName" id="inquiryName">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let inqlist">
+        <div style="min-width:200px">{{inqlist.inquiryName}} </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="inquiryEmail" id="inquiryEmail">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let inqlist">
+        <div style="min-width:200px">{{inqlist.inquiryEmail}}</div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="inquiryCell" id="inquiryCell">
+      <th mat-header-cell *matHeaderCellDef>Cell</th>
+      <td mat-cell *matCellDef="let inqlist">
+        <div style="min-width:300px">{{inqlist.inquiryCell}}</div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="inquiryComments" id="inquiryComments">
+      <th mat-header-cell *matHeaderCellDef>Comments</th>
+      <td mat-cell *matCellDef="let inqlist">
+        <div style="min-width:500px">{{inqlist.inquiryComments}}</div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="actions" stickyEnd>
+      <th *matHeaderCellDef> Actions </th>
+      <td *matCellDef="let row">
+        <button mat-icon-button mat-sm-button matTooltip="Edit" (click)="EditInquiry(row)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button mat-sm-button matTooltip="Edit"  (click)="OpenFollowUpDialog(row.id)"  >
+          <mat-icon>circle</mat-icon>
+        </button>
+        
+       <!--  <button mat-icon-button mat-sm-button matTooltip="Edit" [routerLink]="['/inquiry/appointment']" [queryParams]="{id:row.id}"   >
+          <mat-icon>circle</mat-icon>
+        </button> -->
+
+        <button mat-icon-button mat-sm-button matTooltip="Delete Inquiry" color="warn"
+          (click)="DeleteInquiry(row.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns sticky:true "></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</div>
+  </div>
+</div>

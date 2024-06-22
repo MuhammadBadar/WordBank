@@ -179,7 +179,21 @@ BEGIN
 	EXECUTE stmt1;
 	DEALLOCATE PREPARE stmt1;
 END
-;;
-delimiter ;
+;
+DROP PROCEDURE IF EXISTS `GetMaxIdByClient`;
 
-SET FOREIGN_KEY_CHECKS = 1;
+CREATE PROCEDURE `GetMaxIdByClient`(IN `prm_TableName` VARCHAR ( 200 ) ,
+								IN `prm_HeaderId` int ,
+                                IN `prm_ColumnName` varchar(200))
+BEGIN
+	
+	SET @QueryStr = 'SELECT COALESCE(MAX(Id), 0) FROM ';
+	SET @QueryStr = CONCAT( @QueryStr, `prm_TableName` , ' where ' ,`prm_ColumnName`, ' = ' ,`prm_HeaderId` );
+	PREPARE stmt1 
+	FROM
+		@QueryStr;
+	EXECUTE stmt1;
+	DEALLOCATE PREPARE stmt1;
+
+END
+;;

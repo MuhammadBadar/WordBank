@@ -12,7 +12,7 @@ namespace LMS.Core.Entities
         public int InquiryId { get; set; }
         public int StatusId { get; set; }
         public DateTime NextApptDate { get; set; }
-        public string? Comment { get; set; }
+        public string? Comment { get; set; }//
 
 
     }

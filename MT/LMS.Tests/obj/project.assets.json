@@ -91,11 +91,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Tests\\LMS.Tests.csproj",
+      "projectUniqueName": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Tests\\LMS.Tests.csproj",
       "projectName": "LMS.Tests",
-      "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Tests\\LMS.Tests.csproj",
+      "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Tests\\LMS.Tests.csproj",
       "packagesPath": "C:\\Users\\AU TRADERS\\.nuget\\packages\\",
-      "outputPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Tests\\obj\\",
+      "outputPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -116,14 +116,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Core\\LMS.Core.csproj": {
-              "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Core\\LMS.Core.csproj"
+            "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Core\\LMS.Core.csproj": {
+              "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Core\\LMS.Core.csproj"
             },
-            "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Service\\LMS.Service.csproj": {
-              "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Service\\LMS.Service.csproj"
+            "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Service\\LMS.Service.csproj": {
+              "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Service\\LMS.Service.csproj"
             },
-            "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.WebAPI\\LMS.WebAPI.csproj": {
-              "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.WebAPI\\LMS.WebAPI.csproj"
+            "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.WebAPI\\LMS.WebAPI.csproj": {
+              "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.WebAPI\\LMS.WebAPI.csproj"
             }
           }
         }

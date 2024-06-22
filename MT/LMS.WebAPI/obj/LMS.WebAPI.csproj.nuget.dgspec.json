@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.WebAPI\\LMS.WebAPI.csproj": {}
+    "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.WebAPI\\LMS.WebAPI.csproj": {}
   },
   "projects": {
-    "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Core\\LMS.Core.csproj": {
+    "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Core\\LMS.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Core\\LMS.Core.csproj",
+        "projectUniqueName": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Core\\LMS.Core.csproj",
         "projectName": "LMS.Core",
-        "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Core\\LMS.Core.csproj",
+        "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Core\\LMS.Core.csproj",
         "packagesPath": "C:\\Users\\AU TRADERS\\.nuget\\packages\\",
-        "outputPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Core\\obj\\",
+        "outputPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -58,14 +58,14 @@
         }
       }
     },
-    "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.DAL\\LMS.DAL.csproj": {
+    "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.DAL\\LMS.DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.DAL\\LMS.DAL.csproj",
+        "projectUniqueName": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.DAL\\LMS.DAL.csproj",
         "projectName": "LMS.DAL",
-        "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.DAL\\LMS.DAL.csproj",
+        "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.DAL\\LMS.DAL.csproj",
         "packagesPath": "C:\\Users\\AU TRADERS\\.nuget\\packages\\",
-        "outputPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.DAL\\obj\\",
+        "outputPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.DAL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -86,8 +86,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Core\\LMS.Core.csproj": {
-                "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Core\\LMS.Core.csproj"
+              "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Core\\LMS.Core.csproj": {
+                "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Core\\LMS.Core.csproj"
               }
             }
           }
@@ -116,14 +116,14 @@
         }
       }
     },
-    "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Service\\LMS.Service.csproj": {
+    "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Service\\LMS.Service.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Service\\LMS.Service.csproj",
+        "projectUniqueName": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Service\\LMS.Service.csproj",
         "projectName": "LMS.Service",
-        "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Service\\LMS.Service.csproj",
+        "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Service\\LMS.Service.csproj",
         "packagesPath": "C:\\Users\\AU TRADERS\\.nuget\\packages\\",
-        "outputPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Service\\obj\\",
+        "outputPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Service\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -144,11 +144,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Core\\LMS.Core.csproj": {
-                "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Core\\LMS.Core.csproj"
+              "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Core\\LMS.Core.csproj": {
+                "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Core\\LMS.Core.csproj"
               },
-              "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.DAL\\LMS.DAL.csproj": {
-                "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.DAL\\LMS.DAL.csproj"
+              "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.DAL\\LMS.DAL.csproj": {
+                "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.DAL\\LMS.DAL.csproj"
               }
             }
           }
@@ -177,14 +177,14 @@
         }
       }
     },
-    "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.WebAPI\\LMS.WebAPI.csproj": {
+    "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.WebAPI\\LMS.WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.WebAPI\\LMS.WebAPI.csproj",
+        "projectUniqueName": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.WebAPI\\LMS.WebAPI.csproj",
         "projectName": "LMS.WebAPI",
-        "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.WebAPI\\LMS.WebAPI.csproj",
+        "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.WebAPI\\LMS.WebAPI.csproj",
         "packagesPath": "C:\\Users\\AU TRADERS\\.nuget\\packages\\",
-        "outputPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.WebAPI\\obj\\",
+        "outputPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -205,11 +205,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Core\\LMS.Core.csproj": {
-                "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Core\\LMS.Core.csproj"
+              "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Core\\LMS.Core.csproj": {
+                "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Core\\LMS.Core.csproj"
               },
-              "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Service\\LMS.Service.csproj": {
-                "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Service\\LMS.Service.csproj"
+              "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Service\\LMS.Service.csproj": {
+                "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Service\\LMS.Service.csproj"
               }
             }
           }

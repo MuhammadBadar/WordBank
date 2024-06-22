@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "TpuoiwT/2VyL4blIQ/MxcCZO+53QAx4iVLws2t1dKc8T8DOJWBeiH2zHvpteC79XM9d9bHxqSi0Weg9Yrix/Tw==",
+  "dgSpecHash": "yiyweCRJj87pvTYkk893E+jEsWIuFAbpHIVVDpraxGWdoJzM4cL8epF7IWEp+8H1fcOKDn8iB94IOdtIeE53ug==",
   "success": true,
-  "projectFilePath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.WebAPI\\LMS.WebAPI.csproj",
+  "projectFilePath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.WebAPI\\LMS.WebAPI.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

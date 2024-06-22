@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Core\\LMS.Core.csproj",
+      "projectUniqueName": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Core\\LMS.Core.csproj",
       "projectName": "LMS.Core",
-      "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Core\\LMS.Core.csproj",
+      "projectPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Core\\LMS.Core.csproj",
       "packagesPath": "C:\\Users\\AU TRADERS\\.nuget\\packages\\",
-      "outputPath": "D:\\QST\\Projects\\Git\\WordBank\\LMS\\MT\\LMS.Core\\obj\\",
+      "outputPath": "D:\\QST\\Projects\\Git\\WordBank\\MT\\LMS.Core\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

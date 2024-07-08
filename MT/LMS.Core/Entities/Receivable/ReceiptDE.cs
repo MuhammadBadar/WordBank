@@ -14,5 +14,16 @@ namespace LMS.Core.Entities.Receivable
         public double Amount { get; set; }
         public string? Comments { get; set; }
         public DateTime NextPayDate { get; set; }
+
+
+        #region View Properties
+
+        public string? Customer { get; set; }
+
+        #endregion
+
     }
+
+
+
 }

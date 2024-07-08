@@ -1,0 +1,107 @@
+<div class="container-fluid page">
+    <div class="d-flex page_box p-3 mt-2 header-sticky" style="position: sticky;">
+        <div *ngIf="AddMode">Manage Receipt</div>
+        <div *ngIf="EditMode">Edit Receipt</div>
+        <div fxFlex fxLayout="row" fxLayoutAlign="end center" style="margin-top: 0; padding-top: 0;">
+            <button mat-icon-button style="color: rgb(225, 223, 235); margin-top: 0; padding-top: 0;"
+                (click)="dialogRefe.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+
+<div class="page_content shadow p-3 position-relative">
+    <form #ReceiptForm="ngForm">
+
+
+        <div fxLayout="row" fxLayoutAlign="space-between">
+
+            
+            <mat-form-field appearance="outline" fxFlex="48%">
+                <mat-label>Please Select Customer</mat-label>
+                <mat-select name="customerId" [(ngModel)]="selectedReceipt.customerId">
+                    <mat-option [value]="0" (click)="Refresh();">--Please Select--</mat-option>
+                    <mat-option *ngFor="let customer of customers" [value]="customer.id">
+                        {{customer.name}}
+                    </mat-option>
+                    </mat-select>
+            </mat-form-field>
+
+
+            <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                <mat-label>Phone No</mat-label>
+                <input matInput required #number="ngModel" name="number" [(ngModel)]="selectedReceipt.number">
+            </mat-form-field>
+          
+
+
+
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+            <mat-form-field fxFlex="48%" appearance="outline">
+
+                <mat-label> Date</mat-label>
+                <input matInput [ngxMatDatetimePicker]="picker" name="date" readonly="true" required="true"
+                    #invDate="ngModel" [(ngModel)]="selectedReceipt.date">
+                <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+                <ngx-mat-datetime-picker class="datetimepicker" #picker [showSpinners]="true" [enableMeridian]="false"
+                    [disableMinute]="true" [hideTime]="true">
+                </ngx-mat-datetime-picker>
+
+            </mat-form-field>
+            <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                <mat-label>NextPayDate</mat-label>
+                <input matInput required [matDatepicker]="picker2" placeholder="nextPayDate"
+                    [(ngModel)]="selectedReceipt.nextPayDate" name="nextPayDate">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+
+       
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+           
+
+            <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                <mat-label>Amount</mat-label>
+                <input matInput required #number="ngModel" name="amount" [(ngModel)]="selectedReceipt.amount"
+                    type="number">
+            </mat-form-field>
+            <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                <mat-label>Comment</mat-label>
+                <textarea matInput  name="comments" [(ngModel)]="selectedReceipt.comments"></textarea>
+            </mat-form-field>
+           
+
+        </div>
+     
+        
+        <mat-checkbox name="isActive" [(ngModel)]="selectedReceipt.isActive">Is Active</mat-checkbox>
+
+        <div fxLayoutAlign="end end">
+
+
+            <div style="margin-top: 10px;">
+
+                <button *ngIf="AddMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
+                    (click)="SaveReceipt();">
+                    Save
+                </button>
+                <button *ngIf="EditMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
+                    (click)="SaveReceipt()">
+                    Update
+                </button>
+            </div>
+            <div>
+                <button mat-icon-button mat-sm-button color="primary" cTooltip="Refresh" cTooltipPlacement="top"
+                    (click)="ngOnInit()">
+                    <mat-icon>autorenew</mat-icon>
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+</div>

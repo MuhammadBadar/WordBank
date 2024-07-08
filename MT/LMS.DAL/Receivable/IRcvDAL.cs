@@ -12,15 +12,17 @@ namespace LMS .DAL.Receivable
 {
     public interface IRcvDAL
     {
-        public bool ManageCustomer(CustomerDE _cust, MySqlCommand? cmd);
-        public List<CustomerDE> SearchCustomer(string WhereClause, MySqlCommand cmd);
+        public bool RCV_Manage_Customer(CustomerDE mod, MySqlCommand? cmd);
 
-        public bool ManageInvoice(InvoiceDE _inv, MySqlCommand? cmd);
-        public List<InvoiceDE> SearchInvoice(string WhereClause, MySqlCommand cmd);
+        public List<CustomerDE> RCV_Search_Customer(string WhereClause, MySqlCommand? cmd);
+      
 
-        public bool ManageReceipt (ReceiptDE _rcpt, MySqlCommand? cmd);
-        public List<ReceiptDE> SearchReceipt (string WhereClause, MySqlCommand cmd);
+        public bool RCV_Manage_Invoice(InvoiceDE mod, MySqlCommand? cmd);
+        public List<InvoiceDE> RCV_Search_Invoice (string WhereClause, MySqlCommand cmd);
 
+        public bool RCV_Manage_Receipt (ReceiptDE mod , MySqlCommand? cmd);
+        public List<ReceiptDE> RCV_Search_Receipt (string WhereClause, MySqlCommand cmd);
+         
 
     }
 }

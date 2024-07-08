@@ -17,8 +17,7 @@ namespace LMS.DAL.Receivable
     {
 
         #region DbOperations
-
-         public bool ManageInvoice(InvoiceDE _inv, MySqlCommand? cmd)
+        public bool RCV_Manage_Invoice(InvoiceDE mod, MySqlCommand? cmd)
         {
             bool closeConnection = false;
             try
@@ -28,39 +27,38 @@ namespace LMS.DAL.Receivable
                     cmd = LMSDataContext.OpenMySqlConnection();
                     closeConnection = true;
                 }
-                cmd.CommandText = "Manage_Invoice";
-
-                cmd.Parameters.AddWithValue("prm_id", _inv.Id);
-                cmd.Parameters.AddWithValue("prm_customerId", _inv.CustomerId);
-                cmd.Parameters.AddWithValue("prm_invDate", _inv.InvDate);
-                cmd.Parameters.AddWithValue("prm_invNo", _inv.InvNo);
-                cmd.Parameters.AddWithValue("prm_invAmount", _inv.InvAmount);
-                cmd.Parameters.AddWithValue("prm_comments", _inv.Comments);
-                cmd.Parameters.AddWithValue("prm_createdOn", _inv.CreatedOn);
-                cmd.Parameters.AddWithValue("prm_createdById", _inv.CreatedById);
-                cmd.Parameters.AddWithValue("prm_modifiedOn", _inv.ModifiedOn);
-                cmd.Parameters.AddWithValue("prm_modifiedById", _inv.ModifiedById);
-                cmd.Parameters.AddWithValue("prm_isActive", _inv.IsActive);
-                cmd.Parameters.AddWithValue("prm_dbOperation", _inv.DBoperation.ToString());
+                cmd.CommandText = SPNames.RCV_Manage_Invoice;
+                cmd.Parameters.AddWithValue("prm_clientId", mod.ClientId);
+                cmd.Parameters.AddWithValue("prm_id", mod.Id);
+                cmd.Parameters.AddWithValue("prm_customerId", mod.CustomerId);
+                cmd.Parameters.AddWithValue("prm_invDate", mod.InvDate);
+                cmd.Parameters.AddWithValue("prm_invNo", mod.InvNo);
+                cmd.Parameters.AddWithValue("prm_invAmount", mod.InvAmount);
+                cmd.Parameters.AddWithValue("prm_comments", mod.Comments);
+                cmd.Parameters.AddWithValue("prm_createdOn", mod.CreatedOn);
+                cmd.Parameters.AddWithValue("prm_createdById", mod.CreatedById);
+                cmd.Parameters.AddWithValue("prm_modifiedOn", mod.ModifiedOn);
+                cmd.Parameters.AddWithValue("prm_modifiedById", mod.ModifiedById);
+                cmd.Parameters.AddWithValue("prm_isActive", mod.IsActive);
+                cmd.Parameters.AddWithValue("prm_dbOperation", mod.DBoperation.ToString());
                 cmd.ExecuteNonQuery();
                 return true;
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
             {
+                cmd.Parameters.Clear();
                 if (closeConnection)
                     LMSDataContext.CloseMySqlConnection(cmd);
             }
         }
-        public List<InvoiceDE> SearchInvoice(string WhereClause, MySqlCommand cmd)
+        public List<InvoiceDE> RCV_Search_Invoice(string WhereClause, MySqlCommand? cmd)
         {
             bool closeConnection = false;
-            //WhereClause = string.Empty;
-            List<InvoiceDE> lec = new List<InvoiceDE>();
+            List<InvoiceDE> inv = new List<InvoiceDE>();
             try
             {
                 if (cmd == null)
@@ -68,8 +66,14 @@ namespace LMS.DAL.Receivable
                     cmd = LMSDataContext.OpenMySqlConnection();
                     closeConnection = true;
                 }
-                lec = cmd.Connection.Query<InvoiceDE>("call lms.Search_Invoice('" + WhereClause + "')").ToList();
-                return lec;
+                var parameters = new
+                {
+                    prm_WhereClause = WhereClause
+                ,
+
+                };
+                inv = cmd.Connection.Query<InvoiceDE>(SPNames.RCV_Search_Invoice.ToString(), parameters, commandType: CommandType.StoredProcedure).ToList();
+                return inv;
             }
             catch (Exception)
             {

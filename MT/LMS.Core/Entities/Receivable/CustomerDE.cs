@@ -9,8 +9,8 @@ namespace LMS.Core.Entities.Receivable
     public class CustomerDE : BaseDomain
     {
         #region Properties
-       
-        
+
+        public int PaymentTermId { get; set; }
         public string? Name { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
@@ -21,7 +21,7 @@ namespace LMS.Core.Entities.Receivable
         #endregion
         #region View Properties
 
-        public int PaymentTermId { get; set; }
+        public string?  PaymentTerm { get; set; }
 
 
         #endregion

@@ -5,9 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using LMS.Core.Entities;
 using LMS.Core.Enums;
-using LMS.DAL;
-using MySql.Data.MySqlClient;
-using NLog;
 using LMS.Core.Entities.Receivable;
 using LMS.DAL.Receivable;
 using System.Data;
@@ -15,25 +12,39 @@ using K4os.Hash.xxHash;
 using LMS.Core.Constants;
 
 using static Dapper.SqlMapper;
+using LMS.DAL;
 
 namespace LMS.Service.Receivable
 {
     public partial class RecevService
     {
-        public bool ManageCustomer(CustomerDE _cust)
+
+        public CustomerDE ManageCustomer(CustomerDE mod)
         {
-            bool retVal = false;
             bool closeConnectionFlag = false;
-            MySqlCommand? cmd = null;
             try
             {
-                cmd = LMSDataContext.OpenMySqlConnection();
-                closeConnectionFlag = true;
+                _entity = TableNames.RCV_Customer.ToString();
+                if (cmd == null || cmd.Connection.State != ConnectionState.Open)
+                {
+                    cmd = LMSDataContext.OpenMySqlConnection();
+                    closeConnectionFlag = true;
+                }
+                if (mod.DBoperation == DBoperations.Insert)
+                    mod.Id = _coreDAL.GetnextId(_entity);
 
-                if (_cust.DBoperation == DBoperations.Insert)
-                    _cust.Id = _coreDAL.GetnextId(TableNames.customer.ToString());
-                retVal = _rcvDAL.ManageCustomer(_cust, cmd);
-                return retVal;
+
+
+                if (_rcvDAL.RCV_Manage_Customer(mod, cmd))
+                {
+                    mod.AddSuccessMessage(string.Format(AppConstants.CRUD_DB_OPERATION, _entity, mod.DBoperation.ToString()));
+                    _logger.Info($"Success: " + string.Format(AppConstants.CRUD_DB_OPERATION, _entity, mod.DBoperation.ToString()));
+                }
+                else
+                {
+                    mod.AddErrorMessage(string.Format(AppConstants.CRUD_ERROR, _entity));
+                    _logger.Info($"Error: " + string.Format(AppConstants.CRUD_ERROR, _entity));
+                }
             }
             catch (Exception ex)
             {
@@ -45,43 +56,51 @@ namespace LMS.Service.Receivable
                 if (closeConnectionFlag)
                     LMSDataContext.CloseMySqlConnection(cmd);
             }
+            return mod;
         }
-        public List<CustomerDE> SearchCustomer(CustomerDE _cust)
+        public List<CustomerDE> SearchCustomer(CustomerDE mod)
         {
-            List<CustomerDE> retVal = new List<CustomerDE>();
+            List<CustomerDE> customer = new List<CustomerDE>();
             bool closeConnectionFlag = false;
-            MySqlCommand? cmd = null;
             try
             {
-                cmd = LMSDataContext.OpenMySqlConnection();
-                closeConnectionFlag = true;
+                if (cmd == null || cmd.Connection.State != ConnectionState.Open)
+                {
+                    cmd = LMSDataContext.OpenMySqlConnection();
+                    closeConnectionFlag = true;
+                }
+                #region Search
+
                 string WhereClause = " Where 1=1";
-                if (_cust.Id != default)
-                    WhereClause += $" AND Id={_cust.Id}";
-                if (_cust.ClientId != default)
-                    WhereClause += $" AND ClientId={_cust.ClientId}";
-                if (_cust.PaymentTermId != default)
-                    WhereClause += $" AND PaymentTermId={_cust.PaymentTermId}";
-                if (_cust.Name != default)
-                    WhereClause += $" and Name like ''" + _cust.Name + "''";
-                if (_cust.Email != default)
-                    WhereClause += $" and Email like ''" + _cust.Email + "''";
-                if (_cust.Phone != default)
-                    WhereClause += $" and Phone like ''" + _cust.Phone + "''";
-                if (_cust.Address != default)
-                    WhereClause += $" and Address like ''" + _cust.Address + "''";
-                if (_cust.CreditLimit != default)
-                    WhereClause += $" and CreditLimit like ''" + _cust.CreditLimit + "''";
-                if (_cust.IsActive != default && _cust.IsActive == true)
-                    WhereClause += $" AND IsActive=1";
 
+                if (mod.Id != default && mod.Id != 0)
+                    WhereClause += $" AND cust.Id={mod.Id}";
 
-                retVal = _rcvDAL.SearchCustomer(WhereClause, cmd);
-                return retVal;
+                if (mod.ClientId != default && mod.ClientId != 0)
+                    WhereClause += $" AND cust.ClientId={mod.ClientId}";
+               
+                if (mod.PaymentTermId != default)
+                    WhereClause += $" AND cust.PaymentTermId={mod.PaymentTermId}";
+                if (mod.Name != default)
+                    WhereClause += $" and cust.Name like ''" + mod.Name + "''";
+                if (mod.Email != default)
+                    WhereClause += $" and cust.Email like ''" + mod.Email + "''";
+                if (mod.Phone != default)
+                    WhereClause += $" and cust.Phone like ''" + mod.Phone + "''";
+                if (mod.Address != default)
+                    WhereClause += $" and cust.Address like ''" + mod.Address + "''";
+                if (mod.CreditLimit != default)
+                    WhereClause += $" and cust.CreditLimit like ''" + mod.CreditLimit + "''";
+                if (mod.IsActive != default && mod.IsActive == true)
+                    WhereClause += $" AND cust.IsActive=1";
+                
+                    customer = _rcvDAL.RCV_Search_Customer(WhereClause, cmd);
+
+                #endregion
             }
-            catch (Exception ex)
+            catch (Exception exp)
             {
-                _logger.Error(ex);
+                _logger.Error(exp);
                 throw;
             }
             finally
@@ -89,7 +108,11 @@ namespace LMS.Service.Receivable
                 if (closeConnectionFlag)
                     LMSDataContext.CloseMySqlConnection(cmd);
             }
+            return customer;
         }
 
     }
 }
+
+       
+

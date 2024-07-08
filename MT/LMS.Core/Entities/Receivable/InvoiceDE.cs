@@ -13,5 +13,20 @@ namespace LMS.Core.Entities.Receivable
         public string? InvNo { get; set; }
         public decimal InvAmount { get; set; }
         public string? Comments { get; set; }
+
+
+
+        #region View Properties
+
+        public string? Customer  { get; set; }
+
+        #endregion
+
+
+
+
+
     }
+
+    
 }

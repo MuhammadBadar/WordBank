@@ -17,8 +17,7 @@ namespace LMS.DAL.Receivable
     {
 
         #region DbOperations
-
-        public bool ManageReceipt(ReceiptDE _rcpt, MySqlCommand? cmd)
+        public bool RCV_Manage_Receipt(ReceiptDE mod, MySqlCommand? cmd)
         {
             bool closeConnection = false;
             try
@@ -28,40 +27,39 @@ namespace LMS.DAL.Receivable
                     cmd = LMSDataContext.OpenMySqlConnection();
                     closeConnection = true;
                 }
-                cmd.CommandText = "Manage_Receipt";
-
-                cmd.Parameters.AddWithValue("prm_Id", _rcpt.Id);
-                cmd.Parameters.AddWithValue("prm_customerId", _rcpt.CustomerId);
-                cmd.Parameters.AddWithValue("prm_date", _rcpt.Date);
-                cmd.Parameters.AddWithValue("prm_number", _rcpt.Number);
-                cmd.Parameters.AddWithValue("prm_amount", _rcpt.Amount);
-                cmd.Parameters.AddWithValue("prm_comments", _rcpt.Comments);
-                cmd.Parameters.AddWithValue("prm_nextPayDate", _rcpt.NextPayDate);
-                cmd.Parameters.AddWithValue("prm_createdOn", _rcpt.CreatedOn);
-                cmd.Parameters.AddWithValue("prm_createdById", _rcpt.CreatedById);
-                cmd.Parameters.AddWithValue("prm_modifiedOn", _rcpt.ModifiedOn);
-                cmd.Parameters.AddWithValue("prm_modifiedById", _rcpt.ModifiedById);
-                cmd.Parameters.AddWithValue("prm_isActive", _rcpt.IsActive);
-                cmd.Parameters.AddWithValue("prm_dbOperation", _rcpt.DBoperation.ToString());
+                cmd.CommandText = SPNames.RCV_Manage_Receipt;
+                cmd.Parameters.AddWithValue("prm_clientId", mod.ClientId);
+                cmd.Parameters.AddWithValue("prm_Id", mod.Id);
+                cmd.Parameters.AddWithValue("prm_customerId", mod.CustomerId);
+                cmd.Parameters.AddWithValue("prm_date", mod.Date);
+                cmd.Parameters.AddWithValue("prm_number", mod.Number);
+                cmd.Parameters.AddWithValue("prm_amount", mod.Amount);
+                cmd.Parameters.AddWithValue("prm_comments", mod.Comments);
+                cmd.Parameters.AddWithValue("prm_nextPayDate", mod.NextPayDate);
+                cmd.Parameters.AddWithValue("prm_createdOn", mod.CreatedOn);
+                cmd.Parameters.AddWithValue("prm_createdById", mod.CreatedById);
+                cmd.Parameters.AddWithValue("prm_modifiedOn", mod.ModifiedOn);
+                cmd.Parameters.AddWithValue("prm_modifiedById", mod.ModifiedById);
+                cmd.Parameters.AddWithValue("prm_isActive", mod.IsActive);
+                cmd.Parameters.AddWithValue("prm_dbOperation", mod.DBoperation.ToString());
                 cmd.ExecuteNonQuery();
                 return true;
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
             {
+                cmd.Parameters.Clear();
                 if (closeConnection)
                     LMSDataContext.CloseMySqlConnection(cmd);
             }
         }
-        public List<ReceiptDE> SearchReceipt(string WhereClause, MySqlCommand cmd)
+        public List<ReceiptDE> RCV_Search_Receipt(string WhereClause, MySqlCommand? cmd)
         {
             bool closeConnection = false;
-
-            List<ReceiptDE> lec = new List<ReceiptDE>();
+            List<ReceiptDE> recpt = new List<ReceiptDE>();
             try
             {
                 if (cmd == null)
@@ -69,8 +67,14 @@ namespace LMS.DAL.Receivable
                     cmd = LMSDataContext.OpenMySqlConnection();
                     closeConnection = true;
                 }
-                lec = cmd.Connection.Query<ReceiptDE>("call lms.Search_Receipt('" + WhereClause + "')").ToList();
-                return lec;
+                var parameters = new
+                {
+                    prm_WhereClause = WhereClause
+                ,
+
+                };
+                recpt = cmd.Connection.Query<ReceiptDE>(SPNames.RCV_Search_Receipt.ToString(), parameters, commandType: CommandType.StoredProcedure).ToList();
+                return recpt;
             }
             catch (Exception)
             {
@@ -81,7 +85,8 @@ namespace LMS.DAL.Receivable
                 if (closeConnection)
                     LMSDataContext.CloseMySqlConnection(cmd);
             }
-        }
+        
+    }
         #endregion
     }
 }

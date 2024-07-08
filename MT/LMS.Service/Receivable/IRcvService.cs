@@ -9,18 +9,16 @@ namespace LMS.Service.Receivable
 {
     public interface IRcvService
     {
-        public bool ManageCustomer (CustomerDE _cust);
-        public List<CustomerDE> SearchCustomer (CustomerDE _cust );
+        public CustomerDE ManageCustomer(CustomerDE mod);
+        public List<CustomerDE> SearchCustomer (CustomerDE mod );
 
+        public InvoiceDE ManageInvoice(InvoiceDE mod);
+        public List<InvoiceDE> SearchInvoice(InvoiceDE mod);
 
-        public bool ManageInvoice(InvoiceDE _inv);
-        public List<InvoiceDE> SearchInvoice(InvoiceDE _inv);
+        public ReceiptDE ManageReceipt (ReceiptDE mod);
+        public List<ReceiptDE> SearchReceipt (ReceiptDE mod);
 
-
-        public bool ManageReceipt (ReceiptDE _rcpt );
-        public List<ReceiptDE> SearchReceipt (ReceiptDE _rcpt );
-
-
+       
 
 
     }

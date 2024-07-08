@@ -20,20 +20,32 @@ namespace LMS.Service.Receivable
 {
     public partial class RecevService
     {
-        public bool ManageReceipt(ReceiptDE _rcpt)
+        public ReceiptDE ManageReceipt(ReceiptDE mod)
         {
-            bool retVal = false;
             bool closeConnectionFlag = false;
-            MySqlCommand? cmd = null;
             try
             {
-                cmd = LMSDataContext.OpenMySqlConnection();
-                closeConnectionFlag = true;
+                _entity = TableNames.RCV_Receipt.ToString();
+                if (cmd == null || cmd.Connection.State != ConnectionState.Open)
+                {
+                    cmd = LMSDataContext.OpenMySqlConnection();
+                    closeConnectionFlag = true;
+                }
+                if (mod.DBoperation == DBoperations.Insert)
+                    mod.Id = _coreDAL.GetnextId(_entity);
 
-                if (_rcpt.DBoperation == DBoperations.Insert)
-                    _rcpt.Id = _coreDAL.GetnextId(TableNames.receipt.ToString());
-                retVal = _rcvDAL.ManageReceipt(_rcpt, cmd);
-                return retVal;
+
+
+                if (_rcvDAL.RCV_Manage_Receipt(mod, cmd))
+                {
+                    mod.AddSuccessMessage(string.Format(AppConstants.CRUD_DB_OPERATION, _entity, mod.DBoperation.ToString()));
+                    _logger.Info($"Success: " + string.Format(AppConstants.CRUD_DB_OPERATION, _entity, mod.DBoperation.ToString()));
+                }
+                else
+                {
+                    mod.AddErrorMessage(string.Format(AppConstants.CRUD_ERROR, _entity));
+                    _logger.Info($"Error: " + string.Format(AppConstants.CRUD_ERROR, _entity));
+                }
             }
             catch (Exception ex)
             {
@@ -45,41 +57,47 @@ namespace LMS.Service.Receivable
                 if (closeConnectionFlag)
                     LMSDataContext.CloseMySqlConnection(cmd);
             }
+            return mod;
         }
-        public List<ReceiptDE> SearchReceipt(ReceiptDE _rcpt)
+        public List<ReceiptDE> SearchReceipt(ReceiptDE mod)
         {
-            List<ReceiptDE> retVal = new List<ReceiptDE>();
+            List<ReceiptDE> Receipt = new List<ReceiptDE>();
             bool closeConnectionFlag = false;
-            MySqlCommand? cmd = null;
             try
             {
-                cmd = LMSDataContext.OpenMySqlConnection();
-                closeConnectionFlag = true;
+                if (cmd == null || cmd.Connection.State != ConnectionState.Open)
+                {
+                    cmd = LMSDataContext.OpenMySqlConnection();
+                    closeConnectionFlag = true;
+                }
+                #region Search
+
                 string WhereClause = " Where 1=1";
-                if (_rcpt.Id != default)
-                    WhereClause += $" AND Id={_rcpt.Id}";
-                if (_rcpt.CustomerId != default)
-                    WhereClause += $" and CustomerId like ''" + _rcpt.CustomerId + "''";
-                if (_rcpt.Date != default)
-                    WhereClause += $" and Date like ''" + _rcpt.Date + "''";
-                if (_rcpt.Number != default)
-                    WhereClause += $" and Number like ''" + _rcpt.Number + "''";
-                if (_rcpt.Amount != default)
-                    WhereClause += $" and Amount like ''" + _rcpt.Amount + "''";
-                if (_rcpt.Comments != default)
-                    WhereClause += $" and Comments like ''" + _rcpt.Comments + "''";
-                if (_rcpt.NextPayDate != default)
-                    WhereClause += $" and NextPayDate like ''" + _rcpt.NextPayDate + "''";
-                if (_rcpt.IsActive != default && _rcpt.IsActive == true)
-                    WhereClause += $" AND IsActive=1";
+                if (mod.Id != default && mod.Id != 0)
+                    WhereClause += $" AND rcpt.Id={mod.Id}";
 
+                if (mod.CustomerId != default && mod.CustomerId != 0)
+                    WhereClause += $" AND rcpt.CustomerId={mod.CustomerId}";
+                if (mod.Date != default)
+                    WhereClause += $" and rcpt.Date like ''" + mod.Date + "''";
+                if (mod.Number != default)
+                    WhereClause += $" and rcpt.Number like ''" + mod.Number + "''";
+                if (mod.Amount != default)
+                    WhereClause += $" and rcpt.Amount like ''" + mod.Amount + "''";
+                if (mod.Comments != default)
+                    WhereClause += $" and rcpt.Comments like ''" + mod.Comments + "''";
+                if (mod.NextPayDate != default)
+                    WhereClause += $" and rcpt.NextPayDate like ''" + mod.NextPayDate + "''";
+                if (mod.IsActive != default && mod.IsActive == true)
+                    WhereClause += $" AND rcpt.IsActive=1";
+               
+                    Receipt = _rcvDAL.RCV_Search_Receipt(WhereClause, cmd);
 
-                retVal = _rcvDAL.SearchReceipt(WhereClause, cmd);
-                return retVal;
+                #endregion
             }
-            catch (Exception ex)
+            catch (Exception exp)
             {
-                _logger.Error(ex);
+                _logger.Error(exp);
                 throw;
             }
             finally
@@ -87,6 +105,7 @@ namespace LMS.Service.Receivable
                 if (closeConnectionFlag)
                     LMSDataContext.CloseMySqlConnection(cmd);
             }
+            return Receipt;
         }
 
     }

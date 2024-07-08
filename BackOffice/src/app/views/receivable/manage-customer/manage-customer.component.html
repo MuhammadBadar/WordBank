@@ -1,0 +1,100 @@
+<div class="container-fluid page">
+    <div class="d-flex page_box p-3 mt-2 header-sticky" style="position: sticky;">
+        <div *ngIf="AddMode">Manage Customer</div>
+        <div *ngIf="EditMode">Edit Customer</div>
+        <div fxFlex fxLayout="row" fxLayoutAlign="end center" style="margin-top: 0; padding-top: 0;">
+            <button mat-icon-button style="color: rgb(235, 234, 238); margin-top: 0; padding-top: 0;"
+                (click)="dialogRefe.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <div class="page_content shadow p-3 position-relative">
+        <form #CustomerForm="ngForm">
+            <div fxLayout="row" fxLayoutAlign="space-between">
+
+
+                <mat-form-field appearance="outline" fxFlex="48%">
+                    <mat-label>Select PaymentTermId</mat-label>
+                    <mat-select name="PaymentTermId" [(ngModel)]="selectedCustomer.paymentTermId">
+                        <mat-option [value]="0" (click)="Refresh();">--Please Select--</mat-option>
+                        <mat-option *ngFor="let val of PaymentTerms" [value]="val.id">
+                            {{val.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                    <mat-label>Name</mat-label>
+                    <input matInput required #name="ngModel" name="name" [(ngModel)]="selectedCustomer.name">
+                </mat-form-field>
+
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-between">
+
+                <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                    <mat-icon matPrefix>email</mat-icon>
+                    <input matInput type="email" email [(ngModel)]="selectedCustomer.email" name="email"
+                        placeholder="Email" required>
+                    <mat-error *ngIf="CustomerForm.controls['email']?.errors?.['email']">
+                        Email is not valid.
+                    </mat-error>
+                    <mat-error class="form-text text-danger"
+                        *ngIf="CustomerForm.controls['email']?.hasError || CustomerForm.controls['email']?.errors?.['required']">
+                        Its Required
+                    </mat-error>
+                </mat-form-field>
+
+
+                <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                    <mat-label>Phone No</mat-label>
+                    <input matInput required #phone="ngModel" name="phone" [(ngModel)]="selectedCustomer.phone">
+                </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-between">
+                <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                    <mat-label>CreditLimit</mat-label>
+                    <input matInput required #creditLimit="ngModel" name="creditLimit" type="number"
+                        [(ngModel)]="selectedCustomer.creditLimit">
+                </mat-form-field>
+
+                <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                    <mat-label>Address</mat-label>
+                    <input matInput #address="ngModel" name="address" [(ngModel)]="selectedCustomer.address">
+                </mat-form-field>
+
+
+
+            </div>
+
+
+
+
+
+
+            <mat-checkbox name="isActive" [(ngModel)]="selectedCustomer.isActive">Is Active</mat-checkbox>
+
+            <div fxLayoutAlign="end end">
+
+
+                <div style="margin-top: 10px;">
+
+                    <button *ngIf="AddMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
+                        (click)="SaveCustomer();">
+                        Save
+                    </button>
+                    <button *ngIf="EditMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
+                        (click)="SaveCustomer()">
+                        Update
+                    </button>
+                </div>
+                <div>
+                    <button mat-icon-button mat-sm-button color="primary" cTooltip="Refresh" cTooltipPlacement="top"
+                        (click)="ngOnInit()">
+                        <mat-icon>autorenew</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

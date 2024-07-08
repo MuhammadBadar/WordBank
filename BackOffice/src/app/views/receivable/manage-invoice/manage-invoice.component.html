@@ -1,0 +1,94 @@
+<div class="container-fluid page">
+    <div class="d-flex page_box p-3 mt-2 header-sticky" style="position: sticky;">
+        <div *ngIf="AddMode">Manage Invoice</div>
+        <div *ngIf="EditMode">Edit Invoice</div>
+        <div fxFlex fxLayout="row" fxLayoutAlign="end center" style="margin-top: 0; padding-top: 0;">
+            <button mat-icon-button style="color: rgb(225, 223, 235); margin-top: 0; padding-top: 0;"
+                (click)="dialogRefe.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <div class="page_content shadow p-3 position-relative">
+        <form #InvoiceForm="ngForm">
+
+
+            <div fxLayout="row" fxLayoutAlign="space-between">
+
+
+                <mat-form-field appearance="outline" fxFlex="48%">
+                    <mat-label>Please Select Customer</mat-label>
+                    <mat-select name="customerId" [(ngModel)]="selectedInvoice.customerId">
+                        <mat-option [value]="0" (click)="Refresh();">--Please Select--</mat-option>
+                        <mat-option *ngFor="let val of customers" [value]="val.id">
+                            {{val.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+
+                <mat-form-field fxFlex="48%" appearance="outline">
+
+                    <mat-label> Date</mat-label>
+                    <input matInput [ngxMatDatetimePicker]="picker" name="invDate" readonly="true" required="true"
+                        #invDate="ngModel" [(ngModel)]="selectedInvoice.invDate">
+                    <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+                    <ngx-mat-datetime-picker class="datetimepicker" #picker [showSpinners]="true"
+                        [enableMeridian]="false" [disableMinute]="true" [hideTime]="true">
+                    </ngx-mat-datetime-picker>
+
+                </mat-form-field>
+
+
+
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-between">
+                <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                    <mat-label>Phone No</mat-label>
+                    <input matInput required #invNo="ngModel" name="invNo" [(ngModel)]="selectedInvoice.invNo">
+                </mat-form-field>
+
+                <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                    <mat-label>Amount</mat-label>
+                    <input matInput required #invAmount="ngModel" name="invAmount"
+                        [(ngModel)]="selectedInvoice.invAmount" type="number">
+                </mat-form-field>
+
+
+
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-between">
+                <mat-form-field fxFlex="100%" appearance="outline" class="form-group">
+                    <mat-label>Comments</mat-label>
+                    <input matInput #comments="ngModel" name="comments" [(ngModel)]="selectedInvoice.comments">
+                </mat-form-field>
+            </div>
+            <mat-checkbox name="isActive" [(ngModel)]="selectedInvoice.isActive">Is Active</mat-checkbox>
+
+            <div fxLayoutAlign="end end">
+
+
+                <div style="margin-top: 10px;">
+
+                    <button *ngIf="AddMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
+                        (click)="SaveInvoice();">
+                        Save
+                    </button>
+                    <button *ngIf="EditMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
+                        (click)="SaveInvoice()">
+                        Update
+                    </button>
+                </div>
+                <div>
+                    <button mat-icon-button mat-sm-button color="primary" cTooltip="Refresh" cTooltipPlacement="top"
+                        (click)="ngOnInit()">
+                        <mat-icon>autorenew</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

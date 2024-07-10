@@ -1,40 +1,31 @@
-
-import { Component, Injector, OnInit, ViewChild } from '@angular/core';
-import { InquiryVM } from '../Models/InquiryVM';
-import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import Swal from 'sweetalert2';
-import { InquiryService } from '../inquiry.service';
-import { ActivatedRoute } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { Component, Injector, ViewChild } from '@angular/core';
+import { ServiceVM } from '../Models/ServiceVM';
 import { CatalogService } from '../../catalog/catalog.service';
-import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppConstants } from 'src/app/app.constants/AppConstants';
-
-
+import { NgForm } from '@angular/forms';
+import { InquiryService } from '../inquiry.service';
 
 @Component({
-  selector: 'app-manage-Inquiry',
-  templateUrl: './manage-Inquiry.component.html',
-  styleUrls: ['./manage-Inquiry.component.css']
+  selector: 'app-manage-service',
+  templateUrl: './manage-service.component.html',
+  styleUrls: ['./manage-service.component.css']
 })
-export class ManageInquiryComponent implements OnInit{
-  @ViewChild('InquiryForm', { static: true }) InquiryForm!: NgForm;
+export class ManageServiceComponent {
+  @ViewChild('ServiceForm', { static: true }) ServiceForm!: NgForm;
   AddMode: boolean = true;
   EditMode: boolean = false;
-  value: InquiryVM
+  value: ServiceVM
   dialogRefe: any;
   dialogData: any;
-  selectedInquiry: InquiryVM
+  selectedService: ServiceVM
   proccessing: boolean;
   constructor(
     private InqSvc: InquiryService,
     private injector: Injector,
     private catSvc: CatalogService) {
-    this.InqSvc.selectedInquiry = new InquiryVM
-    this.selectedInquiry = new InquiryVM
+    this.selectedService = new ServiceVM
+    this.selectedService = new ServiceVM
     this.dialogRefe = this.injector.get(MatDialogRef, null);
     this.dialogData = this.injector.get(MAT_DIALOG_DATA, null);
   }
@@ -42,33 +33,33 @@ export class ManageInquiryComponent implements OnInit{
     this.Refresh()
     if (this.dialogData)
       if (this.dialogData.id != undefined) {
-        this.selectedInquiry.id = this.dialogData.id
+        this.selectedService.id = this.dialogData.id
         this.EditMode = true
         this.AddMode = false
-        this.GetInquiryById()
+        this.GetServiceById()
       }
-    this.selectedInquiry.isActive = true;
+    this.selectedService.isActive = true;
   }
 
-  GetInquiryById() {
-    var cust = new InquiryVM
-    cust.id = this.selectedInquiry.id
-    this.InqSvc.SearchInquiry(cust).subscribe({
-      next: (value: InquiryVM[]) => {
-        this.selectedInquiry = value[0]
+  GetServiceById() {
+    var cust = new ServiceVM
+    cust.id = this.selectedService.id
+    this.InqSvc.SearchService(cust).subscribe({
+      next: (value: ServiceVM[]) => {
+        this.selectedService = value[0]
       }, error: (err) => {
-        alert('Error to retrieve Inquiry');
+        alert('Error to retrieve Service');
         this.catSvc.ErrorMsgBar("Error Occurred", 5000)
       },
     })
   }
-  SaveInquiry() {
+  SaveService() {
    
-    if (!this.InquiryForm.invalid) {
-      if (this.selectedInquiry.id > 0)
-        this.UpdateInquiry()
+    if (!this.ServiceForm.invalid) {
+      if (this.selectedService.id > 0)
+        this.UpdateService()
       else {
-        this.InqSvc.SaveInquiry(this.selectedInquiry).subscribe({
+        this.InqSvc.SaveService(this.selectedService).subscribe({
           next: (result) => {
             debugger
             result.resultMessages.forEach(element => {
@@ -92,11 +83,11 @@ export class ManageInquiryComponent implements OnInit{
     else
       this.catSvc.ErrorMsgBar("Please fill all required fields", 5000)
   }
-  UpdateInquiry() {
+  UpdateService() {
     debugger
-    this.InqSvc.UpdateInquiry(this.selectedInquiry).subscribe({
+    this.InqSvc.UpdateService(this.selectedService).subscribe({
       next: (res) => {
-        this.catSvc.SuccessMsgBar("Inquiry Successfully Updated!", 5000)
+        this.catSvc.SuccessMsgBar("Service Successfully Updated!", 5000)
         this.ngOnInit();
       }, error: (e) => {
         this.catSvc.ErrorMsgBar("Error Occurred", 5000)
@@ -110,7 +101,7 @@ export class ManageInquiryComponent implements OnInit{
     this.AddMode = true;
     this.EditMode = false;
     this.proccessing = false
-    this.selectedInquiry = new InquiryVM
+    this.selectedService = new ServiceVM
   }
 
 }

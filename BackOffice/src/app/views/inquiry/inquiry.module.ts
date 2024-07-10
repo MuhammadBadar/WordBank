@@ -2,7 +2,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, NgModule } from '@angular/cor
 import { CommonModule, DatePipe } from '@angular/common';
 
 import { InquiryRoutingModule} from './inquiry-routing.module';
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
+
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
@@ -17,7 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
- import { MatMomentDateModule } from '@angular/material-moment-adapter';
+
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
@@ -30,7 +30,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AccordionModule, BadgeModule, BreadcrumbModule, ButtonModule, CardModule, CollapseModule, GridModule, UtilitiesModule, SharedModule, ListGroupModule, PlaceholderModule, ProgressModule, SpinnerModule, TabsModule, NavModule, TooltipModule, CarouselModule, FormModule, DropdownModule, PaginationModule, PopoverModule, ModalModule, TableModule } from '@coreui/angular';
 import { IconModule } from '@coreui/icons-angular';
-import { MatDatepickerModule } from '@matheo/datepicker';
+
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { ManageInquiryFollowUpComponent } from './manage-inquiry-follow-up/manage-inquiry-follow-up.component';
@@ -38,23 +38,28 @@ import { ManageAppointmentComponent } from './manage-appointment/manage-appointm
 import { ManageInquiryComponent } from './manage-inquiry/manage-inquiry.component';
 import {ManageInquirylistComponent} from './manage-inquirylist/manage-inquirylist.component';
 import { AuthorizationCheck } from '../security/AuthorizationCheck';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { ManageServiceComponent } from './manage-service/manage-service.component';
+import { ManageServiceOutlineComponent } from './manage-service-out-line/manage-service-out-line.component';
+import { NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { ServiceListComponent } from './service-list/service-list.component';
 
 
 
 
 @NgModule({
-  declarations: [ ManageAppointmentComponent,  ManageInquiryComponent,ManageInquiryFollowUpComponent,ManageInquirylistComponent ],
+  declarations: [ ManageAppointmentComponent,  ManageInquiryComponent,ManageInquiryFollowUpComponent,ManageInquirylistComponent, ManageServiceComponent, ManageServiceOutlineComponent, ServiceListComponent ],
               
   imports: [
-    NgxMatDatetimePickerModule,
-    MatMomentDateModule,
+
     NgxMaterialTimepickerModule,
    // NgxMaterialTimepickerModule,
     NgxMatNativeDateModule,
     FlexLayoutModule,
     FormsModule,
     MatDialogModule,
-    MatDatepickerModule,
+   
     MatNativeDateModule,
     MatMomentDateModule,
     MatTableModule,
@@ -119,7 +124,7 @@ import { AuthorizationCheck } from '../security/AuthorizationCheck';
     MatProgressSpinnerModule
   ],
 
-  providers: [DatePipe ,AuthorizationCheck ,MatDatepickerModule,MatNativeDateModule],
+  providers: [DatePipe ,AuthorizationCheck ,MatNativeDateModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 export class InquiryModule { }

@@ -7,17 +7,14 @@
   </div>
 </div>
 <div class="page_content shadow p-3 position-relative">
-  <div style="margin-top: 30px;text-align: right;margin-right: 10px;">
-    <button style="color: white;" mat-raised-button class="mb-05" matTooltip="Create new Inquiry" color="primary"
-      [routerLink]="['/inquiry/manage-inquiry']">Create Inquiry</button>
-
-  </div>
+  <div class="pull-right" style="text-align:end; margin-top: 20px;">
+    <button  style="color: white;" mat-raised-button class="mb-05" matTooltip="Create new Customer" color="primary"
+        (click)="OpenInquiryDialog()">Create Inquiry
+    </button>
+</div>
   <div class="example-table-container" style=" overflow-x: scroll;margin-top: 20px; ">
     <table mat-table #table [dataSource]="dataSource">
-      <ng-container matColumnDef="id" id="id">
-        <th mat-header-cell *matHeaderCellDef style="width: 10px;">SrNo </th>
-        <td mat-cell *matCellDef="let inqlist" style="width: 10px;"> {{inqlist.id}} </td>
-      </ng-container>
+    
 
       <ng-container matColumnDef="inquiryName" id="inquiryName">
         <th mat-header-cell *matHeaderCellDef> Name </th>
@@ -46,16 +43,12 @@
       <ng-container matColumnDef="actions" stickyEnd>
         <th *matHeaderCellDef> Actions </th>
         <td *matCellDef="let row">
-          <button mat-icon-button mat-sm-button matTooltip="Edit" (click)="EditInquiry(row)">
+          <button mat-icon-button mat-sm-button matTooltip="Edit" (click)="EditInquiry(row.id)">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button mat-sm-button matTooltip="Edit" (click)="OpenFollowUpDialog(row.id)">
+          <button mat-icon-button mat-sm-button matTooltip="Edit" (click)="OpenFollowUpDialog()">
             <mat-icon>circle</mat-icon>
           </button>
-
-          <!--  <button mat-icon-button mat-sm-button matTooltip="Edit" [routerLink]="['/inquiry/appointment']" [queryParams]="{id:row.id}"   >
-          <mat-icon>circle</mat-icon>
-        </button> -->
 
           <button mat-icon-button mat-sm-button matTooltip="Delete Inquiry" color="warn"
             (click)="DeleteInquiry(row.id)">

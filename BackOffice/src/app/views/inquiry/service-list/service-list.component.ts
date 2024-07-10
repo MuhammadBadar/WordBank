@@ -1,28 +1,25 @@
-
-import { Component, Injector, OnInit } from '@angular/core';
-import { InquiryVM } from '../Models/InquiryVM';
-import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import Swal from 'sweetalert2';
+import { Component } from '@angular/core';
 import { InquiryService } from '../inquiry.service';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ManageInquiryFollowUpComponent } from '../manage-inquiry-follow-up/manage-inquiry-follow-up.component';
+import { MatDialog } from '@angular/material/dialog';
 import { CatalogService } from '../../catalog/catalog.service';
-import { ManageInquiryComponent } from '../manage-inquiry/manage-inquiry.component';
-
+import { Router } from '@angular/router';
+import { ServiceVM } from '../Models/ServiceVM';
+import Swal from 'sweetalert2';
+import { ManageServiceComponent } from '../manage-service/manage-service.component';
+import { ManageServiceOutlineComponent } from '../manage-service-out-line/manage-service-out-line.component';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
-  selector: 'app-manage-Inquirylist',
-  templateUrl: './manage-Inquirylist.component.html',
-  styleUrls: ['./manage-Inquirylist.component.css']
+  selector: 'app-service-list',
+  templateUrl: './service-list.component.html',
+  styleUrls: ['./service-list.component.scss']
 })
-export class ManageInquirylistComponent {
+export class ServiceListComponent {
 
- 
-  displayedColumns = ['inquiryName', 'inquiryEmail', 'inquiryCell', 'inquiryComments', 'actions']
+  displayedColumns = ['serName', 'serTitle', 'actions']
   isLoading: boolean = false
   dataSource: any
-  inquiry: InquiryVM[];
+  Service: ServiceVM[];
   constructor(
     private catSvc: CatalogService,
     public dialog:  MatDialog,
@@ -30,9 +27,9 @@ export class ManageInquirylistComponent {
     private InqSvc: InquiryService) {
   }
   ngOnInit(): void {
-    this.GetInquiry();
+    this.GetService();
   }
-  DeleteInquiry(id: number) {
+  DeleteService(id: number) {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -43,14 +40,14 @@ export class ManageInquirylistComponent {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.value) {
-        this.InqSvc.DeleteInquiry(id).subscribe({
+        this.InqSvc.DeleteService(id).subscribe({
           next: (data) => {
             Swal.fire(
               'Deleted!',
-              'Inquiry has been deleted.',
+              'Service has been deleted.',
               'success'
             )
-            this.GetInquiry();
+            this.GetService();
           }, error: (e: any) => {
             this.catSvc.ErrorMsgBar("Error Occurred", 5000)
             console.warn(e);
@@ -59,45 +56,45 @@ export class ManageInquirylistComponent {
       }
     })
   }
-  OpenInquiryDialog() {
+  OpenServiceDialog() {
     debugger
-    var dialogRef = this.dialog.open(ManageInquiryComponent, {
+    var dialogRef = this.dialog.open(ManageServiceComponent, {
       disableClose: true, panelClass: 'calendar-form-dialog', width: '1000px', height: '450px'
       , data: {}
     });
     dialogRef.afterClosed()
       .subscribe((res) => {
-        this.GetInquiry()
+        this.GetService()
       });
   }
-  OpenFollowUpDialog() {
+  OpenServiceOutlineDialog() {
     debugger
-    var dialogRef = this.dialog.open(ManageInquiryFollowUpComponent, {
+    var dialogRef = this.dialog.open(ManageServiceOutlineComponent, {
       disableClose: true, panelClass: 'calendar-form-dialog', width: '1000px', height: '450px'
       , data: {}
     });
     dialogRef.afterClosed()
       .subscribe((res) => {
-        this.GetInquiry()
+        this.GetService()
       });
   }
-  EditInquiry(id: number) {
-    var dialogRef = this.dialog.open(ManageInquiryComponent, {
+  EditService(id: number) {
+    var dialogRef = this.dialog.open(ManageServiceComponent, {
       disableClose: true, width: '1000px',
       height: '450px'
       , data: { id: id }
     });
     dialogRef.afterClosed()
       .subscribe((res) => {
-        this.GetInquiry()
+        this.GetService()
       });
   }
-  GetInquiry() {
+  GetService() {
     this.isLoading=true
-    var Inquirys = new InquiryVM
-    this.InqSvc.SearchInquiry(Inquirys).subscribe({
-      next: (res: InquiryVM[]) => {
-        this.inquiry = res
+    var Services = new ServiceVM
+    this.InqSvc.SearchService(Services).subscribe({
+      next: (res: ServiceVM[]) => {
+        this.Service = res
         this.dataSource = new MatTableDataSource(res)
         this.isLoading=false
       }, error: (e) => {
@@ -112,3 +109,5 @@ export class ManageInquirylistComponent {
 
   
   
+
+

@@ -20,7 +20,7 @@ import { MatTableDataSource } from '@angular/material/table';
 export class ManageInquiryFollowUpComponent implements OnInit {
 
 
-  displayedColumns: string[] = [/* 'statusId','inquiryId', */ 'date',  'nextAppointmentDate', 'comment', 'isActive', 'actions'];
+  displayedColumns: string[] = ['date',  'nextAppointmentDate', 'comment', 'isActive', 'actions'];
   AddMode: boolean = true
   EditMode: boolean = false
   Add: boolean = true;
@@ -28,9 +28,6 @@ export class ManageInquiryFollowUpComponent implements OnInit {
   dataSource: any
   DataSource: any
   dialogData: any;
-/*   date: string = '';
-  comment: string = ''; */
-
   selectedFollowUp: FollowUpVM 
   follow: FollowUpVM[]
   FollowUpStatuses: SettingsVM[] 
@@ -55,8 +52,6 @@ dialogRefe :any;
     this.inqSvc.selectedInquiry = new InquiryVM
     this.dialogRefe = this.injector.get(MatDialogRef, null);
     this.dialogData = this.injector.get(MAT_DIALOG_DATA, null);
-    /* this.FollowUpStatuses = this.selectedFollowUp.enumTypeId; */
-
   }
    
 
@@ -93,30 +88,6 @@ dialogRefe :any;
         }
       })
     }
-
-
-    Search(){
-      var  follow = new FollowUpVM();
-      this.FollowUpStatuses.entries = this.selectedInquiry.id;
-      this.inqSvc.SearchFollowUp(follow).subscribe({
-       next: (value: FollowUpVM[]) => {
-         this.follow = value
-       }, error: (err) => {
-         this.catSvc.ErrorMsgBar("Error Occurred", 5000)
-       },
-     })
-       var  inquiry = new InquiryVM();
-       inquiry.id = this.selectedInquiry.id;
-       this.inqSvc.SearchInquiry(inquiry).subscribe({
-        next: (value: InquiryVM[]) => {
-          this.selectedInquiry = value
-          this.dataSource = new MatTableDataSource(this.selectedInquiry)
-        }, error: (err) => {
-          this.catSvc.ErrorMsgBar("Error Occurred", 5000)
-        },
-      })
-           }
-    
 
   GetFollowUp() {
     this.inqSvc.GetFollowUp().subscribe({
@@ -185,34 +156,9 @@ dialogRefe :any;
   Refresh() {
     this.Add = true;
     this.Edit = false;
+    this.selectedFollowUp = new FollowUpVM;
   }
-  DeleteFollowUp(id: number) {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.value) {
-        this.inqSvc.DeleteFollowUp(id).subscribe({
-          next: (data) => {
-            Swal.fire(
-              'Deleted!',
-              'FollowUp has been deleted.',
-              'success'
-            )
-            this.Refresh();
-          }, error: (e) => {
-            this.catSvc.ErrorMsgBar("Error Occurred", 5000)
-            console.warn(e);
-          }
-        })
-      }
-    })
-  }
+
 
 }
 

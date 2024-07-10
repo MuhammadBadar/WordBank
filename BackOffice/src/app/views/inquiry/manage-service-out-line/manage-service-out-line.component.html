@@ -1,0 +1,163 @@
+<div class="container-fluid page">
+    <div class="d-flex page_box p-3 mt-2 header-sticky" style="position: sticky;">
+        <div *ngIf="AddMode">Manage ServiceOutline</div>
+        <div *ngIf="EditMode">Edit ServiceOutline</div>
+        <div fxFlex fxLayout="row" fxLayoutAlign="end center" style="margin-top: 0; padding-top: 0;">
+            <button mat-icon-button style="color: rgb(225, 223, 235); margin-top: 0; padding-top: 0;"
+                (click)="dialogRefe.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+
+
+    <form #ServiceOutlineForm="ngForm">
+        <div fxLayout="row" fxLayoutAlign="space-between">
+
+
+            <mat-form-field appearance="outline" fxFlex="48%">
+                <mat-label>Select Service</mat-label>
+                <mat-select name="serviceId" [(ngModel)]="selectedServiceOutline.serviceId">
+                    <mat-option [value]="0" (click)="Refresh();">--Please Select--</mat-option>
+                    <mat-option *ngFor="let val of Services" [value]="val.id">
+                        {{val.serName}}
+                    </mat-option>
+                </mat-select>
+
+            </mat-form-field>
+            <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                <mat-label>content</mat-label>
+                <input matInput required #content="ngModel" name="content" [(ngModel)]="selectedServiceOutline.content">
+            </mat-form-field>
+
+
+        </div>
+
+
+
+        <mat-checkbox name="isActive" [(ngModel)]="selectedServiceOutline.isActive">Is Active</mat-checkbox>
+
+        <div fxLayoutAlign="end end">
+
+
+            <div style="margin-top: 10px;">
+
+                <button *ngIf="AddMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
+                    (click)="SaveServiceOutline();">
+                    Save
+                </button>
+
+                <button *ngIf="EditMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
+                    (click)="SaveServiceOutline()">
+                    Update
+                </button>
+            </div>
+            <div>
+                <button mat-icon-button mat-sm-button color="primary" cTooltip="Refresh" cTooltipPlacement="top"
+                    (click)="ngOnInit()">
+                    <mat-icon>autorenew</mat-icon>
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>
+<c-card style="padding: 10px; margin-top: 30px;" class="mat-elevation-z8">
+    <h5 cCardTitle>ServiceOutline List</h5>
+
+    <c-card-body style="padding: 10px;margin: 5px;border-radius: 10px;">
+        <div class="example-table-container" style=" overflow-x: scroll;margin-top: 20px; ">
+            <table mat-table #table [dataSource]="dataSource">
+            
+        
+                <ng-container matColumnDef="services">
+                    <th mat-header-cell *matHeaderCellDef> Services </th>
+                    <td mat-cell *matCellDef="let service"> {{service.services}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="content">
+                    <th mat-header-cell *matHeaderCellDef> Content </th>
+                    <td mat-cell *matCellDef="let service"> {{service.content}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="isActive">
+                    <th mat-header-cell *matHeaderCellDef> Is Active </th>
+                    <td mat-cell *matCellDef="let service"> {{ service.isActive ? 'yes' :
+                        'no' }} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="actions" stickyEnd>
+                    <th mat-header-cell *matHeaderCellDef style="width: 100px; text-align: center;"> Actions
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                        <div style="width: 100px;">
+                            <button mat-icon-button mat-sm-button style="color:#1e293b ; "
+                                cTooltip=" Edit  ServiceOutline " (click)="GetServiceOutlineById()">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button mat-sm-button matTooltip="Delete ServiceOutline" color="warn"
+                                (click)="DeleteServiceOutline(row.id)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+
+
+                        </div>
+                    </td>
+                </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns sticky:true "></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        
+          </div>
+        <!-- <div class="example-table-container">
+            <section class="example-container mat-elevation-z8" tabindex="0" style="border-radius: 5px;">
+                <table mat-table [dataSource]=" dataSource" class="mat-elevation-z8">
+
+
+
+                    <ng-container matColumnDef="services">
+                        <th mat-header-cell *matHeaderCellDef> Services </th>
+                        <td mat-cell *matCellDef="let service"> {{service.services}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="content">
+                        <th mat-header-cell *matHeaderCellDef> Content </th>
+                        <td mat-cell *matCellDef="let service"> {{service.content}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="isActive">
+                        <th mat-header-cell *matHeaderCellDef> Is Active </th>
+                        <td mat-cell *matCellDef="let service"> {{ service.isActive ? 'yes' :
+                            'no' }} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="actions" stickyEnd>
+                        <th mat-header-cell *matHeaderCellDef style="width: 100px; text-align: center;"> Actions
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            <div style="width: 100px;">
+                                <button mat-icon-button mat-sm-button style="color:#1e293b ; "
+                                    cTooltip=" Edit  ServiceOutline " (click)="EditServiceOutline(row.id)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button mat-sm-button matTooltip="Delete ServiceOutline" color="warn"
+                                    (click)="DeleteServiceOutline(row.id)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+
+
+                            </div>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                </table>
+            </section>
+        </div> -->
+    </c-card-body>
+</c-card>

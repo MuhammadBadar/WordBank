@@ -6,6 +6,8 @@ import { ManageInquiryFollowUpComponent } from './manage-inquiry-follow-up/manag
 import { ManageAppointmentComponent } from './manage-appointment/manage-appointment.component';
 import { ManageInquirylistComponent } from './manage-inquirylist/manage-inquirylist.component';
 import { ManageInquiryComponent } from './manage-inquiry/manage-inquiry.component';
+import { ManageServiceOutlineComponent } from './manage-service-out-line/manage-service-out-line.component';
+import { ServiceListComponent } from './service-list/service-list.component';
 
 const routes: Routes = [{ 
   path: '',
@@ -19,10 +21,21 @@ children:[
     redirectTo: 'inquiry'
   },
   {
-    path: "manage-inquiry",
+    path: "manageinquiry",
     component: ManageInquiryComponent,
 
   },
+  {
+    path: "serviceList",
+    component: ServiceListComponent,
+
+  },
+  {
+    path: "serviceOutline",
+    component: ManageServiceOutlineComponent,
+
+  },
+
   {
     path: "inquirylist",
     component: ManageInquirylistComponent,

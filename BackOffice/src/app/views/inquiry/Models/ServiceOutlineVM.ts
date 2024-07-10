@@ -1,6 +1,8 @@
 
 export class ServiceOutlineVM {
-    ServiceId?: number
-    Content?: string
-   
+    id?:number
+    serviceId?:number
+    content?:string
+    isActive?:boolean
+    services?:string
 }

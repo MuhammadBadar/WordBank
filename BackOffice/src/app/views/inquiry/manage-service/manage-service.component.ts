@@ -42,9 +42,9 @@ export class ManageServiceComponent {
   }
 
   GetServiceById() {
-    var cust = new ServiceVM
-    cust.id = this.selectedService.id
-    this.InqSvc.SearchService(cust).subscribe({
+    var ser = new ServiceVM
+    ser.id = this.selectedService.id
+    this.InqSvc.SearchService(ser).subscribe({
       next: (value: ServiceVM[]) => {
         this.selectedService = value[0]
       }, error: (err) => {
@@ -64,11 +64,11 @@ export class ManageServiceComponent {
             debugger
             result.resultMessages.forEach(element => {
               if (element.messageType != AppConstants.ERROR_MESSAGE_TYPE) {
-                this.catSvc.SuccessMsgBar(" Successfully Added", 5000)
+                this.catSvc.SuccessMsgBar(element.message, 5000)
                 this.ngOnInit();
               }
               else
-                this.catSvc.ErrorMsgBar("Please fill all required fields", 5000)
+                this.catSvc.ErrorMsgBar(element.message, 5000)
               this.catSvc.isLoading = false
             });
           }, error: (e) => {

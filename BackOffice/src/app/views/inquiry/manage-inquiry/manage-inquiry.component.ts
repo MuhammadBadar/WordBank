@@ -12,6 +12,7 @@ import { CatalogService } from '../../catalog/catalog.service';
 import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppConstants } from 'src/app/app.constants/AppConstants';
+import { ServiceVM } from '../Models/ServiceVM';
 
 
 
@@ -25,43 +26,81 @@ export class ManageInquiryComponent implements OnInit{
   AddMode: boolean = true;
   EditMode: boolean = false;
   value: InquiryVM
-  dialogRefe: any;
-  dialogData: any;
   selectedInquiry: InquiryVM
+ Services : ServiceVM[];
+ selectedServices : ServiceVM
   proccessing: boolean;
+  isLoading: boolean;
+  dataSource: any;
+  inquiry: InquiryVM[];
+  inqId: number;
   constructor(
     private InqSvc: InquiryService,
-    private injector: Injector,
+    private route: ActivatedRoute,
     private catSvc: CatalogService) {
     this.InqSvc.selectedInquiry = new InquiryVM
     this.selectedInquiry = new InquiryVM
-    this.dialogRefe = this.injector.get(MatDialogRef, null);
-    this.dialogData = this.injector.get(MAT_DIALOG_DATA, null);
   }
   ngOnInit(): void {
     this.Refresh()
-    if (this.dialogData)
-      if (this.dialogData.id != undefined) {
-        this.selectedInquiry.id = this.dialogData.id
-        this.EditMode = true
-        this.AddMode = false
-        this.GetInquiryById()
-      }
+    this.route.queryParams.subscribe(params => {
+      
+      this.inqId = params['id'];
+   });
+   if (this.inqId > 0) {
+     this.EditMode = true;
+     this.AddMode = false;
+     this.GetInquiryById();
+   }
+    this.GetService();
+    this.selectedServices = new ServiceVM
     this.selectedInquiry.isActive = true;
   }
+  GetService() {
+    this.isLoading=true
+    var Services = new ServiceVM
+    this.InqSvc.SearchService(Services).subscribe({
+      next: (res: ServiceVM[]) => {
+        this.Services = res
+        this.dataSource = new MatTableDataSource(res)
+        this.isLoading=false
+      }, error: (e) => {
+        console.warn(e)
+        this.catSvc.ErrorMsgBar("Error Occurred", 4000)
+      }
+    })
+  }
+ 
 
-  GetInquiryById() {
-    var cust = new InquiryVM
-    cust.id = this.selectedInquiry.id
-    this.InqSvc.SearchInquiry(cust).subscribe({
+  updateServices(service) {
+    const index = this.selectedInquiry.selectedServiceIds.indexOf(service);
+    if (index !== -1)
+      this.selectedInquiry.selectedServiceIds.splice(index, 1);
+    else
+    this.selectedInquiry.selectedServiceIds.push(service);
+ 
+  } 
+  GetInquiry() {
+    this.InqSvc.GetInquiry().subscribe({
       next: (value: InquiryVM[]) => {
-        this.selectedInquiry = value[0]
+        debugger;
+        this.inquiry = value
+        this.dataSource = new MatTableDataSource(this.inquiry)
       }, error: (err) => {
         alert('Error to retrieve Inquiry');
         this.catSvc.ErrorMsgBar("Error Occurred", 5000)
       },
     })
   }
+  GetInquiryById() {
+    debugger
+    this.InqSvc.selectedInquiry.id = this.inqId
+    this.InqSvc.SearchInquiry(this.InqSvc.selectedInquiry).subscribe((res: InquiryVM[]) => {
+      this.inquiry = res;
+      this.InqSvc.selectedInquiry = this.inquiry[0]
+    });
+  } 
+  
   SaveInquiry() {
    
     if (!this.InquiryForm.invalid) {
@@ -73,11 +112,11 @@ export class ManageInquiryComponent implements OnInit{
             debugger
             result.resultMessages.forEach(element => {
               if (element.messageType != AppConstants.ERROR_MESSAGE_TYPE) {
-                this.catSvc.SuccessMsgBar(" Successfully Added", 5000)
+                this.catSvc.SuccessMsgBar(element.message, 5000)
                 this.ngOnInit();
               }
               else
-                this.catSvc.ErrorMsgBar("Please fill all required fields", 5000)
+                this.catSvc.ErrorMsgBar(element.message, 5000)
               this.catSvc.isLoading = false
             });
           }, error: (e) => {

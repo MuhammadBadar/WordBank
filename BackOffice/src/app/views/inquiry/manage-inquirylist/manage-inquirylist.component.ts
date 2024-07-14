@@ -23,13 +23,18 @@ export class ManageInquirylistComponent {
   isLoading: boolean = false
   dataSource: any
   inquiry: InquiryVM[];
+  EditMode: boolean;
+  AddMode: boolean;
+  selectedInquiry: InquiryVM;
   constructor(
     private catSvc: CatalogService,
     public dialog:  MatDialog,
     private route: Router,
     private InqSvc: InquiryService) {
+      this.selectedInquiry = new InquiryVM
   }
   ngOnInit(): void {
+   
     this.GetInquiry();
   }
   DeleteInquiry(id: number) {
@@ -59,21 +64,18 @@ export class ManageInquirylistComponent {
       }
     })
   }
-  OpenInquiryDialog() {
-    debugger
-    var dialogRef = this.dialog.open(ManageInquiryComponent, {
-      disableClose: true, panelClass: 'calendar-form-dialog', width: '1000px', height: '450px'
-      , data: {}
-    });
-    dialogRef.afterClosed()
-      .subscribe((res) => {
-        this.GetInquiry()
-      });
+ 
+
+  EditInquiry(inquiry) {
+   
+    this.route.navigate(['/inquiry/manageinquiry'], { queryParams: { id: inquiry.id } });
+   
+
   }
   OpenFollowUpDialog() {
     debugger
     var dialogRef = this.dialog.open(ManageInquiryFollowUpComponent, {
-      disableClose: true, panelClass: 'calendar-form-dialog', width: '1000px', height: '450px'
+      disableClose: true, panelClass: 'calendar-form-dialog', width: '98%', height: '98%'
       , data: {}
     });
     dialogRef.afterClosed()
@@ -81,17 +83,7 @@ export class ManageInquirylistComponent {
         this.GetInquiry()
       });
   }
-  EditInquiry(id: number) {
-    var dialogRef = this.dialog.open(ManageInquiryComponent, {
-      disableClose: true, width: '1000px',
-      height: '450px'
-      , data: { id: id }
-    });
-    dialogRef.afterClosed()
-      .subscribe((res) => {
-        this.GetInquiry()
-      });
-  }
+
   GetInquiry() {
     this.isLoading=true
     var Inquirys = new InquiryVM

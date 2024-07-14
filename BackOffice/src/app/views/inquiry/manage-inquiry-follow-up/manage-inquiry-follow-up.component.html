@@ -1,24 +1,27 @@
+
 <div class="container-fluid page">
     <div class="d-flex page_box p-3 mt-2 header-sticky" style="position: sticky;">
         <div *ngIf="AddMode">Manage FollowUp</div>
         <div *ngIf="EditMode">Edit FollowUp</div>
-        <div fxFlex fxLayout="row" fxLayoutAlign="end center" style="margin-top: 0; padding-top: 0;">
-            <button mat-icon-button style="color: rgb(235, 234, 238); margin-top: 0; padding-top: 0;"
-                (click)="dialogRefe.close()" aria-label="Close dialog">
-                <mat-icon>close</mat-icon>
-            </button>
-        </div>
-    </div>
 
+    </div>
+    <div fxFlex fxLayout="row" fxLayoutAlign="end center" style="margin-top: 0; padding-top: 0;">
+        <button mat-icon-button style="color: rgb(31, 16, 120); margin-top: 0; padding-top: 0;"
+            (click)="dialogRefe.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+</div>
 <div class="page_content shadow p-3 position-relative">
     <form #FollowUpForm="ngForm">
         <div fxLayout="row" fxLayoutAlign="space-between">
 
 
+          
             <mat-form-field appearance="outline" fxFlex="48%">
                 <mat-label>Select FollowUpStatuses</mat-label>
-                <mat-select name="id" [(ngModel)]="selectedFollowUp.id">
-                    <mat-option [value]="0" (click)="Refresh();">--Please Select--</mat-option>
+                <mat-select name="statusId" [(ngModel)]="selectedFollowUp.statusId"  required>
+                    <mat-option  [value]="0" (click)="Refresh();">--Please Select--</mat-option>
                     <mat-option *ngFor="let val of FollowUpStatuses" [value]="val.id">
                         {{val.name}}
                     </mat-option>
@@ -30,7 +33,7 @@
 
                 <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
                     <mat-label>Date</mat-label>
-                    <input matInput [matDatepicker]="picker" placeholder="date" [(ngModel)]="selectedFollowUp.date"
+                    <input matInput required [matDatepicker]="picker" placeholder="date" [(ngModel)]="selectedFollowUp.date"
                         name="date">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
@@ -38,24 +41,20 @@
 
                 <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
                     <mat-label>NextAppointmentDate</mat-label>
-                    <input matInput [matDatepicker]="picker1" placeholder="nextAppointmentDate"
+                    <input matInput required [matDatepicker]="picker1" placeholder="nextAppointmentDate"
                         [(ngModel)]="selectedFollowUp.nextAppointmentDate" name="nextAppointmentDate">
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
             </div>
 
-
-
-
-
-        
         <div>
             <mat-form-field fxFlex="100%"  appearance="outline" class="form-group">
                 <mat-label>Comment</mat-label>
-                <textarea matInput required name="comment" [(ngModel)]="selectedFollowUp.comment"></textarea>
+                <textarea matInput  name="comment" [(ngModel)]="selectedFollowUp.comment"></textarea>
             </mat-form-field>
         </div>
+
 
         <mat-checkbox name="isActive" [(ngModel)]="selectedFollowUp.isActive">Is Active</mat-checkbox>
 
@@ -64,11 +63,11 @@
 
             <div style="margin-top: 10px;">
 
-                <button *ngIf="Add" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
+                <button *ngIf="AddMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
                     (click)="SaveFollowUp();">
                     Save
                 </button>
-                <button *ngIf="Edit" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
+                <button *ngIf="EditMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
                     (click)="UpdateFollowUp()">
                     Update
                 </button>
@@ -81,7 +80,7 @@
             </div>
         </div>
     </form>
-    <!-- <c-card style="padding: 10px; margin-top: 30px;" class="mat-elevation-z8">
+    <c-card style="padding: 10px; margin-top: 30px;" class="mat-elevation-z8">
         <h5 cCardTitle>FollowUp List</h5>
 
         <c-card-body style="padding: 10px;margin: 5px;border-radius: 10px;">
@@ -89,16 +88,22 @@
                 <section class="example-container mat-elevation-z8" tabindex="0" style="border-radius: 5px;">
                     <table mat-table [dataSource]=" DataSource" class="mat-elevation-z8">
 
-                   
+                        <ng-container matColumnDef="followUpStatuses">
+                            <th mat-header-cell *matHeaderCellDef> FollowUpStatuses </th>
+                            <td mat-cell *matCellDef="let follow"> {{follow.followUpStatuses}} </td>
+                        </ng-container>
 
                         <ng-container matColumnDef="date">
                             <th mat-header-cell *matHeaderCellDef> Date </th>
-                            <td mat-cell *matCellDef="let follow"> {{follow.date}} </td>
+                            <td mat-cell *matCellDef="let follow">
+                                {{follow.date|date:"dd/MM/yyyy"}}
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="nextAppointmentDate">
                             <th mat-header-cell *matHeaderCellDef> NextAppointmentDate </th>
-                            <td mat-cell *matCellDef="let follow"> {{follow.nextAppointmentDate}}
+                            <td mat-cell *matCellDef="let follow">
+                                {{follow.nextAppointmentDate|date:"dd/MM/yyyy"}}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="comment">
@@ -138,5 +143,12 @@
                 </section>
             </div>
         </c-card-body>
-    </c-card> -->
-</div>
+    </c-card>
+
+
+
+
+
+
+
+

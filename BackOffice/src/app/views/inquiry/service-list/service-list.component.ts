@@ -12,7 +12,7 @@ import { MatTableDataSource } from '@angular/material/table';
 @Component({
   selector: 'app-service-list',
   templateUrl: './service-list.component.html',
-  styleUrls: ['./service-list.component.scss']
+  styleUrls: ['./service-list.component.css']
 })
 export class ServiceListComponent {
 
@@ -59,7 +59,7 @@ export class ServiceListComponent {
   OpenServiceDialog() {
     debugger
     var dialogRef = this.dialog.open(ManageServiceComponent, {
-      disableClose: true, panelClass: 'calendar-form-dialog', width: '1000px', height: '450px'
+      disableClose: true, panelClass: 'calendar-form-dialog', width: '80%', height: '90%'
       , data: {}
     });
     dialogRef.afterClosed()
@@ -67,11 +67,11 @@ export class ServiceListComponent {
         this.GetService()
       });
   }
-  OpenServiceOutlineDialog() {
+  OpenServiceOutlineDialog(ServiceId) {
     debugger
     var dialogRef = this.dialog.open(ManageServiceOutlineComponent, {
-      disableClose: true, panelClass: 'calendar-form-dialog', width: '1000px', height: '450px'
-      , data: {}
+      disableClose: true, panelClass: 'calendar-form-dialog', width: '80%', height: '90%'
+      , data: {id : ServiceId}
     });
     dialogRef.afterClosed()
       .subscribe((res) => {
@@ -103,6 +103,7 @@ export class ServiceListComponent {
       }
     })
   }
+  
 }
 
 

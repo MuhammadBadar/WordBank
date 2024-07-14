@@ -6,6 +6,5 @@ export class FollowUpVM{
     nextAppointmentDate: Date
     comment?:string
     isActive: boolean
-    followUpStatuses?: string
 
 }

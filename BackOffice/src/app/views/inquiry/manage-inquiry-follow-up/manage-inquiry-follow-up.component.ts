@@ -8,9 +8,10 @@ import { ManageInquirylistComponent } from '../manage-inquirylist/manage-inquiry
 import { InquiryVM } from '../Models/InquiryVM';
 import { SettingsVM } from '../../catalog/Models/SettingsVM';
 import { EnumTypeVM } from '../../security/models/EnumTypeVM';
-import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { MatNativeDateModule } from '@angular/material/core';
+
 import { MatTableDataSource } from '@angular/material/table';
+import { AppConstants } from 'src/app/app.constants/AppConstants';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-manage-inquiry-follow-up',
@@ -19,15 +20,15 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class ManageInquiryFollowUpComponent implements OnInit {
 
-
-  displayedColumns: string[] = ['date',  'nextAppointmentDate', 'comment', 'isActive', 'actions'];
+  @ViewChild('FollowUpForm', { static: true }) FollowUpForm!: NgForm;
+  
+  displayedColumns: string[] = [ 'followUpStatuses','date',  'nextAppointmentDate', 'comment', 'isActive', 'actions'];
   AddMode: boolean = true
   EditMode: boolean = false
-  Add: boolean = true;
-  Edit: boolean = false;
   dataSource: any
   DataSource: any
   dialogData: any;
+
   selectedFollowUp: FollowUpVM 
   follow: FollowUpVM[]
   FollowUpStatuses: SettingsVM[] 
@@ -52,20 +53,21 @@ dialogRefe :any;
     this.inqSvc.selectedInquiry = new InquiryVM
     this.dialogRefe = this.injector.get(MatDialogRef, null);
     this.dialogData = this.injector.get(MAT_DIALOG_DATA, null);
+  
   }
    
 
 
   ngOnInit(): void {
+    this.Refresh()
     if (this.dialogData)
-      if (this.dialogData.id != undefined) {
-        
+      if (this.dialogData.id != undefined) { 
         this.selectedFollowUp.inquiryId = this.dialogData.id
-       
-       
+        this.EditMode = true
+        this.AddMode = false
+       this. GetFollowUpById();
       }
-
-    this.GetFollowUp();
+      this.GetFollowUp();
    this.GetSettings(EnumTypeVM.FollowUpStatuses);
     this.selectedFollowUp.isActive = true;
    
@@ -89,6 +91,8 @@ dialogRefe :any;
       })
     }
 
+
+
   GetFollowUp() {
     this.inqSvc.GetFollowUp().subscribe({
       next: (value: FollowUpVM[]) => {
@@ -102,16 +106,59 @@ dialogRefe :any;
     })
   }
 
-  SaveFollowUp() {
-    this.inqSvc.SaveFollowUp(this.selectedFollowUp).subscribe({
-      next: (value) => {
-        this.catSvc.SuccessMsgBar("Successfully Added", 5000)
-        this.Refresh();
+  GetFollowUpById() {
+    debugger
+    var follow = new FollowUpVM
+    follow.inquiryId = this.selectedFollowUp.inquiryId
+    this.inqSvc.SearchFollowUp(follow).subscribe({
+      next: (value: FollowUpVM[]) => {
+
+        if ( value != undefined && value.length > 0 ) {
+          this.AddMode= false
+          this.EditMode = true
+          this.selectedFollowUp = value[0]
+        }
+        else{
+          this.AddMode= true
+          this.EditMode = false
+        }
+       
+        console.warn();
       }, error: (err) => {
-        console.warn(err)
+        alert('Error to retrieve FollowUp');
         this.catSvc.ErrorMsgBar("Error Occurred", 5000)
       },
     })
+  }
+  SaveFollowUp() {
+    if (this.selectedFollowUp.statusId == 0 || this.selectedFollowUp.statusId == undefined)
+      this.FollowUpForm.form.controls['statusId'].setErrors({ 'incorrect': true })
+    if (!this.FollowUpForm.invalid) {
+      if (this.selectedFollowUp.id > 0)
+        this.UpdateFollowUp()
+      else {
+        this.inqSvc.SaveFollowUp(this.selectedFollowUp).subscribe({
+          next: (result) => {
+            result.resultMessages.forEach(element => {
+              if (element.messageType != AppConstants.ERROR_MESSAGE_TYPE) {
+                this.catSvc.SuccessMsgBar(element.message, 5000)
+                this.ngOnInit();
+              }
+              else
+                this.catSvc.ErrorMsgBar(element.message, 5000)
+              this.catSvc.isLoading = false
+            });
+          }, error: (e) => {
+            this.catSvc.ErrorMsgBar("Error Occurred", 5000)
+            console.warn(e);
+            this.catSvc.isLoading = false
+          }
+
+        })
+      }
+    }
+    else
+      this.catSvc.ErrorMsgBar("Please fill all required fields", 5000)
   }
   EditFollowUp(follow: FollowUpVM) {
     this.EditMode = true
@@ -120,15 +167,15 @@ dialogRefe :any;
   }
   GetFollowUpForEdit(id: number) {
     this.selectedFollowUp = new FollowUpVM;
-    this.selectedFollowUp.id = id
+    this.selectedFollowUp.id= id
     console.warn(this.selectedFollowUp);
     this.inqSvc.SearchFollowUp(this.selectedFollowUp).subscribe({
       next: (res: FollowUpVM[]) => {
         this.follow = res;
         console.warn(this.follow);
         this.selectedFollowUp = this.follow[0]
-        this.Edit = true;
-        this.Add = false;
+        this.EditMode = true;
+        this.AddMode = false;
       }, error: (e) => {
         this.catSvc.ErrorMsgBar("Error Occurred", 5000)
         console.warn(e);
@@ -141,8 +188,8 @@ dialogRefe :any;
       next: (res) => {
 
         this.catSvc.SuccessMsgBar("FollowUp Successfully Updated!", 5000)
-        this.Add = true;
-        this.Edit = false;
+        this.AddMode = true;
+        this.EditMode = false;
         this.proccessing = false
         this.ngOnInit();
       }, error: (e) => {
@@ -154,11 +201,38 @@ dialogRefe :any;
     this.proccessing = false
   }
   Refresh() {
-    this.Add = true;
-    this.Edit = false;
-    this.selectedFollowUp = new FollowUpVM;
+    this.AddMode = true;
+    this.EditMode = false;
+    this.proccessing = false
+    this.selectedFollowUp = new FollowUpVM
   }
-
+  DeleteFollowUp(id: number) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.value) {
+        this.inqSvc.DeleteFollowUp(id).subscribe({
+          next: (data) => {
+            Swal.fire(
+              'Deleted!',
+              'FollowUp has been deleted.',
+              'success'
+            )
+            this.Refresh();
+          }, error: (e) => {
+            this.catSvc.ErrorMsgBar("Error Occurred", 5000)
+            console.warn(e);
+          }
+        })
+      }
+    })
+  }
 
 }
 

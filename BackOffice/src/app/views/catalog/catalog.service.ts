@@ -16,6 +16,7 @@ import { CityStudentVM } from '../lms/Models/CityStudentVM';
   providedIn: 'root'
 })
 export class CatalogService {
+  isLoading: boolean;
 
 
  
@@ -30,6 +31,7 @@ export class CatalogService {
   SuccessfullyAddMsg() {
     this.SuccessMsgBar(" Successfully Added!", 5000)
   }
+  
   SuccessMsgBar(Message: string, Duration: number) {
     this.snack.open(Message, 'Ok', { duration: Duration, verticalPosition: 'bottom', panelClass: ['blue-snackbar'] });
   }

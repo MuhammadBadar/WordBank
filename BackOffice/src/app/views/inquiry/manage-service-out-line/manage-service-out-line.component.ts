@@ -49,13 +49,12 @@ import { MatTableDataSource } from '@angular/material/table';
     this.Refresh()
     if (this.dialogData)
       if (this.dialogData.id != undefined) {
-        this.selectedServiceOutline.id = this.dialogData.id
-        this.EditMode = true
-        this.AddMode = false
+        this.selectedServiceOutline.serviceId = this.dialogData.id
+     
         this.GetServiceOutlineById()
       }
+      this.GetServiceOutline();
     this.GetService();
-    this.GetServiceOutline();
     this.selectedService = new ServiceVM
     this.selectedServiceOutline.isActive = true;
   }
@@ -76,11 +75,23 @@ import { MatTableDataSource } from '@angular/material/table';
   }
 
   GetServiceOutlineById() {
-    var inv = new ServiceOutlineVM
-    inv.id = this.selectedServiceOutline.id
-    this.InqSvc.SearchServiceOutline(inv).subscribe({
+    debugger
+    var serOutline = new ServiceOutlineVM
+    serOutline.serviceId = this.selectedServiceOutline.serviceId
+    this.InqSvc.SearchServiceOutline(serOutline).subscribe({
       next: (value: ServiceOutlineVM[]) => {
-        this.selectedServiceOutline = value[0]
+
+        if ( value != undefined && value.length > 0 ) {
+          this.AddMode= false
+          this.EditMode = true
+          this.selectedServiceOutline = value[0]
+        }
+        else{
+          this.AddMode= true
+          this.EditMode = false
+        }
+       
+        console.warn();
       }, error: (err) => {
         alert('Error to retrieve ServiceOutline');
         this.catSvc.ErrorMsgBar("Error Occurred", 5000)
@@ -90,7 +101,7 @@ import { MatTableDataSource } from '@angular/material/table';
   SaveServiceOutline() {
     debugger
     if (this.selectedServiceOutline.serviceId == 0 || this.selectedServiceOutline.serviceId == undefined)
-      this.ServiceOutlineForm.form.controls['ServiceId'].setErrors({ 'incorrect': true })
+      this.ServiceOutlineForm.form.controls['serviceId'].setErrors({ 'incorrect': true })
     if (!this.ServiceOutlineForm.invalid) {
       if (this.selectedServiceOutline.id > 0)
         this.UpdateServiceOutline()
@@ -99,11 +110,11 @@ import { MatTableDataSource } from '@angular/material/table';
           next: (result) => {
             result.resultMessages.forEach(element => {
               if (element.messageType != AppConstants.ERROR_MESSAGE_TYPE) {
-                this.catSvc.SuccessMsgBar("Successfully Added", 5000)
+                this.catSvc.SuccessMsgBar(element.message, 5000)
                 this.ngOnInit();
               }
               else
-                this.catSvc.ErrorMsgBar("Error Occurred", 5000)
+                this.catSvc.ErrorMsgBar(element.message, 5000)
               this.catSvc.isLoading = false
             });
           }, error: (e) => {
@@ -138,33 +149,7 @@ import { MatTableDataSource } from '@angular/material/table';
     this.proccessing = false
     this.selectedServiceOutline = new ServiceOutlineVM
   }
-  DeleteServiceOutline(id: number) {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.value) {
-        this.InqSvc.DeleteServiceOutline(id).subscribe({
-          next: (data) => {
-            Swal.fire(
-              'Deleted!',
-              'Inquiry has been deleted.',
-              'success'
-            )
-            this.GetServiceOutline();
-          }, error: (e: any) => {
-            this.catSvc.ErrorMsgBar("Error Occurred", 5000)
-            console.warn(e);
-          }
-        })
-      }
-    })
-  }
+
   GetServiceOutline() {
     this.isLoading=true
     var Serv = new ServiceOutlineVM
@@ -179,11 +164,7 @@ import { MatTableDataSource } from '@angular/material/table';
       }
     })
   }
-  EditServiceOutline(Id: number) {
-    this.EditMode = true
-    this.AddMode = false
-    
-  }
+
 }
 
 

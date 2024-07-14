@@ -2,73 +2,90 @@
   <div class="d-flex page_box p-3 mt-2 header-sticky" style="position: sticky;">
     <div *ngIf="AddMode">Manage Inquiry</div>
     <div *ngIf="EditMode">Edit Inquiry</div>
-    <div fxFlex fxLayout="row" fxLayoutAlign="end center" style="margin-top: 0; padding-top: 0;">
-      <button mat-icon-button style="color: rgb(235, 234, 238); margin-top: 0; padding-top: 0;"
-        (click)="dialogRefe.close()" aria-label="Close dialog">
-        <mat-icon>close</mat-icon>
-      </button>
-    </div>
+
   </div>
 
-  <div class="page_content shadow p-3 position-relative">
-    <form #InquiryForm="ngForm">
+    <div class="page_content shadow p-3 position-relative" style="display: flex;">
+      <form #InquiryForm="ngForm">
 
-      <div fxLayout="row" fxLayoutAlign="space-between">
-        <mat-form-field fxFlex="45%" appearance="outline" class="form-group">
-          <mat-label>Name </mat-label>
-          <input matInput required name="inquiryName" #inquiryName="ngModel" [(ngModel)]="selectedInquiry.inquiryName"
-            placeholder="Inquiry Name">
-        </mat-form-field>
-        <mat-form-field fxFlex="45%" appearance="outline" class="form-group">
-          <mat-icon matPrefix>Email</mat-icon>
-          <input matInput type="email" email [(ngModel)]="selectedInquiry.inquiryEmail" name="email"
-            placeholder="Email" required>
-          <mat-error *ngIf="InquiryForm.controls['inquiryEmail']?.errors?.['email']">
-            Email is not valid.
-          </mat-error>
-          <mat-error class="form-text text-danger"
-            *ngIf="InquiryForm.controls['inquiryEmail']?.hasError || InquiryForm.controls['inquiryEmail']?.errors?.['required']">
-            Its Required
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field fxFlex="45%" appearance="outline" class="form-group">
-          <mat-label>Cell </mat-label>
+        <div fxLayout="row" fxLayoutAlign="space-between">
 
-          <input matInput required name="inquiryCell" #inquiryCell="ngModel" 
-            [(ngModel)]="selectedInquiry.inquiryCell" placeholder="inquiryCell">
-        </mat-form-field>
+          <mat-form-field fxFlex="45%" appearance="outline" class="form-group">
+            <mat-label>Name </mat-label>
+            <input matInput required name="inquiryName" #inquiryName="ngModel" [(ngModel)]="selectedInquiry.inquiryName"
+              placeholder="Inquiry Name">
+          </mat-form-field>
+          <mat-form-field fxFlex="45%" appearance="outline" class="form-group">
+            <mat-icon matPrefix>email</mat-icon>
+            <input matInput type="email" email [(ngModel)]="selectedInquiry.inquiryEmail" name="email"
+              placeholder="Email" required>
+            <mat-error *ngIf="InquiryForm.controls['inquiryEmail']?.errors?.['email']">
+              Email is not valid.
+            </mat-error>
+            <mat-error class="form-text text-danger"
+              *ngIf="InquiryForm.controls['inquiryEmail']?.hasError || InquiryForm.controls['inquiryEmail']?.errors?.['required']">
+              Its Required
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field fxFlex="45%" appearance="outline" class="form-group">
+            <mat-label>Cell </mat-label>
 
-
-      </div>
-      <div>
-        <mat-form-field fxFlex="100%" appearance="outline" class="form-group">
-          <mat-label>Comments</mat-label>
-          <textarea matInput name="inquiryComments" [(ngModel)]="selectedInquiry.inquiryComments"></textarea>
-        </mat-form-field>
-      </div>
-      <div fxLayoutAlign="end end">
+            <input matInput required name="inquiryCell" #inquiryCell="ngModel" [(ngModel)]="selectedInquiry.inquiryCell"
+              placeholder="inquiryCell">
+          </mat-form-field>
 
 
-        <div style="margin-top: 10px;">
-
-          <button *ngIf="AddMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
-            (click)="SaveInquiry();">
-            Save
-          </button>
-          <button *ngIf="EditMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
-            (click)="SaveInquiry()">
-            Update
-          </button>
         </div>
         <div>
-          <button mat-icon-button mat-sm-button color="primary" cTooltip="Refresh" cTooltipPlacement="top"
-            (click)="ngOnInit()">
-            <mat-icon>autorenew</mat-icon>
-          </button>
+          <mat-form-field fxFlex="100%" appearance="outline" class="form-group">
+            <mat-label>Comments</mat-label>
+            <textarea matInput name="inquiryComments" [(ngModel)]="selectedInquiry.inquiryComments"></textarea>
+          </mat-form-field>
         </div>
+
+
+        <div fxLayoutAlign="end end">
+
+
+          <div style="margin-top: 10px;">
+
+            <button *ngIf="AddMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
+              (click)="SaveInquiry();">
+              Save
+            </button>
+            <button *ngIf="EditMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
+              (click)="SaveInquiry()">
+              Update
+            </button>
+          </div>
+          <div>
+            <button mat-icon-button mat-sm-button color="primary" cTooltip="Refresh" cTooltipPlacement="top"
+              (click)="ngOnInit()">
+              <mat-icon>autorenew</mat-icon>
+            </button>
+          </div>
+        </div>
+
+      </form>
+      <div style="margin-top: 5px; margin-left: 40px; " >
+        <span >
+          <ul>
+            <label for="services"><h6>Select Services:</h6></label>
+            <li *ngFor="let val of Services">
+              <mat-checkbox type="checkbox" required [checked]="selectedInquiry.selectedServiceIds.includes(val.id)"
+                (change)="updateServices(val.id)">
+
+                {{ val.serName }}
+              </mat-checkbox>
+            </li>
+
+          </ul>
+        </span>
+
       </div>
 
-    </form>
+    </div>
 
-  </div>
+
+
 </div>

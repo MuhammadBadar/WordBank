@@ -9,6 +9,8 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { ManageInquiryFollowUpComponent } from '../manage-inquiry-follow-up/manage-inquiry-follow-up.component';
 import { CatalogService } from '../../catalog/catalog.service';
 import { ManageInquiryComponent } from '../manage-inquiry/manage-inquiry.component';
+import { EmailComponent } from '../email/email.component';
+import { SMSComponent } from '../sms/sms.component';
 
 
 @Component({
@@ -72,11 +74,33 @@ export class ManageInquirylistComponent {
    
 
   }
-  OpenFollowUpDialog() {
+  OpenFollowUpDialog(inquiry) {
     debugger
     var dialogRef = this.dialog.open(ManageInquiryFollowUpComponent, {
-      disableClose: true, panelClass: 'calendar-form-dialog', width: '98%', height: '98%'
-      , data: {}
+      disableClose: true, panelClass: 'calendar-form-dialog',  width: '90%', height: '90%'
+      , data: {id:inquiry.id}
+    });
+    dialogRef.afterClosed()
+      .subscribe((res) => {
+        this.GetInquiry()
+      });
+  }
+  OpenEmailDialog(inquiry) {
+    debugger
+    var dialogRef = this.dialog.open(EmailComponent, {
+      disableClose: true, panelClass: 'calendar-form-dialog',  width: '90%', height: '90%'
+      , data: {id:inquiry.id}
+    });
+    dialogRef.afterClosed()
+      .subscribe((res) => {
+        this.GetInquiry()
+      });
+  }
+  OpenSMSDialog(inquiry) {
+    debugger
+    var dialogRef = this.dialog.open(SMSComponent, {
+      disableClose: true, panelClass: 'calendar-form-dialog',  width: '90%', height: '90%'
+      , data: {id:inquiry.id}
     });
     dialogRef.afterClosed()
       .subscribe((res) => {

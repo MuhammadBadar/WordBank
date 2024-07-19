@@ -75,3 +75,14 @@ th {
     color: white;
     font-weight: normal
 }
+#chekdiv{
+   width: 300px;
+height: 300px;
+overflow: auto;
+/* box-sizing: border-box;
+border: 1px solid #ccc; */
+overflow-x: auto; 
+white-space: nowrap; 
+
+
+}

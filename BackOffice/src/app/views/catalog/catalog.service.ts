@@ -16,9 +16,8 @@ import { CityStudentVM } from '../lms/Models/CityStudentVM';
   providedIn: 'root'
 })
 export class CatalogService {
-  isLoading: boolean;
-
-
+  isLoading: boolean = false
+  totalRecords: number; pageSizes: number[]; defaultPageSize: number
  
 
   constructor(

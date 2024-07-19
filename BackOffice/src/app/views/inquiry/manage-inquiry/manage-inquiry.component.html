@@ -5,13 +5,12 @@
 
   </div>
 
-    <div class="page_content shadow p-3 position-relative" style="display: flex;">
-      <form #InquiryForm="ngForm">
+    <div class="page_content shadow p-3 position-relative" style=" display: flex;">
+      <form #InquiryForm="ngForm"  style="flex: 1;">
 
         <div fxLayout="row" fxLayoutAlign="space-between">
 
           <mat-form-field fxFlex="45%" appearance="outline" class="form-group">
-            <mat-label>Name </mat-label>
             <input matInput required name="inquiryName" #inquiryName="ngModel" [(ngModel)]="selectedInquiry.inquiryName"
               placeholder="Inquiry Name">
           </mat-form-field>
@@ -28,8 +27,6 @@
             </mat-error>
           </mat-form-field>
           <mat-form-field fxFlex="45%" appearance="outline" class="form-group">
-            <mat-label>Cell </mat-label>
-
             <input matInput required name="inquiryCell" #inquiryCell="ngModel" [(ngModel)]="selectedInquiry.inquiryCell"
               placeholder="inquiryCell">
           </mat-form-field>
@@ -38,40 +35,20 @@
         </div>
         <div>
           <mat-form-field fxFlex="100%" appearance="outline" class="form-group">
-            <mat-label>Comments</mat-label>
+
             <textarea matInput name="inquiryComments" [(ngModel)]="selectedInquiry.inquiryComments"></textarea>
           </mat-form-field>
         </div>
 
 
-        <div fxLayoutAlign="end end">
-
-
-          <div style="margin-top: 10px;">
-
-            <button *ngIf="AddMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
-              (click)="SaveInquiry();">
-              Save
-            </button>
-            <button *ngIf="EditMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
-              (click)="SaveInquiry()">
-              Update
-            </button>
-          </div>
-          <div>
-            <button mat-icon-button mat-sm-button color="primary" cTooltip="Refresh" cTooltipPlacement="top"
-              (click)="ngOnInit()">
-              <mat-icon>autorenew</mat-icon>
-            </button>
-          </div>
-        </div>
+ 
 
       </form>
-      <div style="margin-top: 5px; margin-left: 40px; " >
+      <div id="chekdiv"  >
         <span >
           <ul>
             <label for="services"><h6>Select Services:</h6></label>
-            <li *ngFor="let val of Services">
+            <li *ngFor="let val of Services" style="list-style-type: none;">
               <mat-checkbox type="checkbox" required [checked]="selectedInquiry.selectedServiceIds.includes(val.id)"
                 (change)="updateServices(val.id)">
 
@@ -82,6 +59,28 @@
           </ul>
         </span>
 
+      </div>
+      <div fxLayoutAlign="end end" style=" align-self: flex-end;
+    margin-bottom: 20px;">
+
+
+        <div style="margin-top: 10px;">
+
+          <button *ngIf="AddMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
+            (click)="SaveInquiry();">
+            Save
+          </button>
+          <button *ngIf="EditMode" cButton class="me-1" style="background-color:#1e293b ;" type="submit"
+            (click)="SaveInquiry()">
+            Update
+          </button>
+        </div>
+        <div>
+          <button mat-icon-button mat-sm-button color="primary" cTooltip="Refresh" cTooltipPlacement="top"
+            (click)="ngOnInit()">
+            <mat-icon>autorenew</mat-icon>
+          </button>
+        </div>
       </div>
 
     </div>

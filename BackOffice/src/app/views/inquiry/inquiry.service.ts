@@ -14,20 +14,13 @@ import {ServiceVM} from './Models/ServiceVM';
 })
 export class InquiryService {
   
-  selectedInquiry: InquiryVM;
   selectedFollowUp: FollowUpVM;
   confirm: any;
-  SuccessMsgBar(arg0: string, arg1: number) {
-    throw new Error('Method not implemented.');
-  }
-  ErrorMsgBar(arg0: string, arg1: number) {
-    throw new Error('Method not implemented.');
-  }
 
 
   constructor(private http: HttpClient) { }
 
-  UpdateInquiry(value: InquiryVM) {
+  UpdateInquiry(value: InquiryVM): Observable<any> {
     return this.http.put(Globals.BASE_API_URL + 'Inquiry', value);
   }
   
@@ -51,7 +44,7 @@ export class InquiryService {
  
  
 
-  UpdateFollowUp(value: FollowUpVM) {
+  UpdateFollowUp(value: FollowUpVM): Observable<any> {
     return this.http.put(Globals.BASE_API_URL + 'FollowUp', value);
   }
   GetFollowUpById(id: number): Observable<FollowUpVM> {
@@ -73,7 +66,7 @@ export class InquiryService {
     return this.http.delete(Globals.BASE_API_URL + 'FollowUp/' + id);
   }
 
-  UpdateAppointment(value: AppointmentVM) {
+  UpdateAppointment(value: AppointmentVM) : Observable<any>{
     return this.http.put(Globals.BASE_API_URL + 'Appointment', value);
   }
   GetAppointmentById(id: number): Observable<AppointmentVM> {
@@ -96,7 +89,7 @@ export class InquiryService {
   }
 
 
-  UpdateService(value: ServiceVM) {
+  UpdateService(value: ServiceVM): Observable<any> {
     return this.http.put(Globals.BASE_API_URL + 'Services', value);
   }
   GetServiceById(id: number): Observable<ServiceVM> {
@@ -120,7 +113,7 @@ export class InquiryService {
 
 
   
-  UpdateServiceOutline(value: ServiceOutlineVM) {
+  UpdateServiceOutline(value: ServiceOutlineVM): Observable<any> {
     return this.http.put(Globals.BASE_API_URL + 'ServiceOutline', value);
   }
   GetServiceOutlineById(id: number): Observable<ServiceOutlineVM> {

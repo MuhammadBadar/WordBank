@@ -20,7 +20,7 @@
 
             <mat-form-field appearance="outline" fxFlex="48%">
                 <mat-label>Select Service</mat-label>
-                <mat-select name="serviceId" [(ngModel)]="selectedServiceOutline.id">
+                <mat-select name="serviceId" [(ngModel)]="selectedServiceOutline.serviceId">
                     <mat-option [value]="0" (click)="Refresh();">--Please Select--</mat-option>
                     <mat-option *ngFor="let val of Services" [value]="val.id">
                         {{val.serName}}
@@ -29,7 +29,7 @@
     
             </mat-form-field>
             <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
-                <mat-label>content</mat-label>
+                <mat-label>Content</mat-label>
                 <input matInput required #content="ngModel" name="content" [(ngModel)]="selectedServiceOutline.content">
             </mat-form-field>
     

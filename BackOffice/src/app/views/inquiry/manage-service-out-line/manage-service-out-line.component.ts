@@ -47,16 +47,16 @@ import { MatTableDataSource } from '@angular/material/table';
   }
   ngOnInit(): void {
     this.Refresh()
+    this.selectedServiceOutline.isActive = true;
     if (this.dialogData)
       if (this.dialogData.id != undefined) {
         this.selectedServiceOutline.serviceId = this.dialogData.id
      
         this.GetServiceOutlineById()
       }
-      this.GetServiceOutline();
+      
     this.GetService();
-    this.selectedService = new ServiceVM
-    this.selectedServiceOutline.isActive = true;
+
   }
   GetService() {
     debugger
@@ -132,17 +132,23 @@ import { MatTableDataSource } from '@angular/material/table';
   UpdateServiceOutline() {
     debugger
     this.InqSvc.UpdateServiceOutline(this.selectedServiceOutline).subscribe({
-      next: (res) => {
-        this.catSvc.SuccessMsgBar("ServiceOutline Successfully Updated!", 5000)
-        this.ngOnInit();
+      next: (result) => {
+        result.resultMessages.forEach(element => {
+          if (element.messageType != AppConstants.ERROR_MESSAGE_TYPE) {
+            this.catSvc.SuccessMsgBar(element.message,5000)
+            this.ngOnInit();
+          }
+          else
+            this.catSvc.ErrorMsgBar(element.message,5000)
+          this.isLoading = false
+        })
       }, error: (e) => {
+        this.isLoading = false
         this.catSvc.ErrorMsgBar("Error Occurred", 5000)
         console.warn(e);
-        this.proccessing = false
       }
     })
-    this.proccessing = false
-  }
+  } 
   Refresh() {
     this.AddMode = true;
     this.EditMode = false;

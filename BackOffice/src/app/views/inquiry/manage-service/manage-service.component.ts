@@ -20,6 +20,7 @@ export class ManageServiceComponent {
   dialogData: any;
   selectedService: ServiceVM
   proccessing: boolean;
+  isLoading: boolean;
   constructor(
     private InqSvc: InquiryService,
     private injector: Injector,
@@ -86,17 +87,23 @@ export class ManageServiceComponent {
   UpdateService() {
     debugger
     this.InqSvc.UpdateService(this.selectedService).subscribe({
-      next: (res) => {
-        this.catSvc.SuccessMsgBar("Service Successfully Updated!", 5000)
-        this.ngOnInit();
+      next: (result) => {
+        result.resultMessages.forEach(element => {
+          if (element.messageType != AppConstants.ERROR_MESSAGE_TYPE) {
+            this.catSvc.SuccessMsgBar(element.message,5000)
+            this.ngOnInit();
+          }
+          else
+            this.catSvc.ErrorMsgBar(element.message,5000)
+          this.isLoading = false
+        })
       }, error: (e) => {
+        this.isLoading = false
         this.catSvc.ErrorMsgBar("Error Occurred", 5000)
         console.warn(e);
-        this.proccessing = false
       }
     })
-    this.proccessing = false
-  }
+  } 
   Refresh() {
     this.AddMode = true;
     this.EditMode = false;

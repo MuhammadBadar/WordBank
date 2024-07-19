@@ -4,11 +4,9 @@ import { Component, Inject, Injector, OnInit, ViewChild } from '@angular/core';
 import { CatalogService } from '../../catalog/catalog.service';
 import Swal from 'sweetalert2';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ManageInquirylistComponent } from '../manage-inquirylist/manage-inquirylist.component';
 import { InquiryVM } from '../Models/InquiryVM';
 import { SettingsVM } from '../../catalog/Models/SettingsVM';
 import { EnumTypeVM } from '../../security/models/EnumTypeVM';
-
 import { MatTableDataSource } from '@angular/material/table';
 import { AppConstants } from 'src/app/app.constants/AppConstants';
 import { NgForm } from '@angular/forms';
@@ -28,7 +26,7 @@ export class ManageInquiryFollowUpComponent implements OnInit {
   dataSource: any
   DataSource: any
   dialogData: any;
-
+id:number
   selectedFollowUp: FollowUpVM 
   follow: FollowUpVM[]
   FollowUpStatuses: SettingsVM[] 
@@ -42,38 +40,30 @@ export class ManageInquiryFollowUpComponent implements OnInit {
 dialogRefe :any;
   dialogRef: any;
   Entities: SettingsVM[];
+  isLoading: boolean;
  
   constructor(  
-   
     private inqSvc: InquiryService,
     private injector: Injector,
     private catSvc: CatalogService) 
     {
     this.selectedFollowUp = new FollowUpVM
-    this.inqSvc.selectedInquiry = new InquiryVM
+    this.selectedInquiry = new InquiryVM
     this.dialogRefe = this.injector.get(MatDialogRef, null);
     this.dialogData = this.injector.get(MAT_DIALOG_DATA, null);
   
   }
-   
-
-
   ngOnInit(): void {
     this.Refresh()
     if (this.dialogData)
       if (this.dialogData.id != undefined) { 
         this.selectedFollowUp.inquiryId = this.dialogData.id
-        this.EditMode = true
-        this.AddMode = false
-       this. GetFollowUpById();
       }
       this.GetFollowUp();
+
    this.GetSettings(EnumTypeVM.FollowUpStatuses);
-    this.selectedFollowUp.isActive = true;
-   
+    this.selectedFollowUp.isActive = true; 
   }
-
-
   GetSettings(etype: EnumTypeVM) {
     var setting = new SettingsVM()
     setting.enumTypeId = etype
@@ -90,40 +80,15 @@ dialogRefe :any;
         }
       })
     }
-
-
-
   GetFollowUp() {
-    this.inqSvc.GetFollowUp().subscribe({
+    debugger
+    var  follow = new FollowUpVM();
+    follow.inquiryId = this.selectedFollowUp.inquiryId;
+    this.inqSvc.SearchFollowUp(follow).subscribe({
       next: (value: FollowUpVM[]) => {
         debugger;
         this.follow = value
         this.DataSource = new MatTableDataSource(this.follow)
-      }, error: (err) => {
-        alert('Error to retrieve FollowUp');
-        this.catSvc.ErrorMsgBar("Error Occurred", 5000)
-      },
-    })
-  }
-
-  GetFollowUpById() {
-    debugger
-    var follow = new FollowUpVM
-    follow.inquiryId = this.selectedFollowUp.inquiryId
-    this.inqSvc.SearchFollowUp(follow).subscribe({
-      next: (value: FollowUpVM[]) => {
-
-        if ( value != undefined && value.length > 0 ) {
-          this.AddMode= false
-          this.EditMode = true
-          this.selectedFollowUp = value[0]
-        }
-        else{
-          this.AddMode= true
-          this.EditMode = false
-        }
-       
-        console.warn();
       }, error: (err) => {
         alert('Error to retrieve FollowUp');
         this.catSvc.ErrorMsgBar("Error Occurred", 5000)
@@ -167,12 +132,11 @@ dialogRefe :any;
   }
   GetFollowUpForEdit(id: number) {
     this.selectedFollowUp = new FollowUpVM;
-    this.selectedFollowUp.id= id
+    this.selectedFollowUp.inquiryId= id
     console.warn(this.selectedFollowUp);
     this.inqSvc.SearchFollowUp(this.selectedFollowUp).subscribe({
       next: (res: FollowUpVM[]) => {
         this.follow = res;
-        console.warn(this.follow);
         this.selectedFollowUp = this.follow[0]
         this.EditMode = true;
         this.AddMode = false;
@@ -183,7 +147,25 @@ dialogRefe :any;
     })
   }
   UpdateFollowUp() {
-    debugger
+    this.inqSvc.UpdateFollowUp(this.selectedFollowUp).subscribe({
+      next: (result:FollowUpVM) => {
+        result.resultMessages.forEach(element => {
+          if (element.messageType != AppConstants.ERROR_MESSAGE_TYPE) {
+            this.catSvc.SuccessMsgBar(element.message,5000)
+            this.ngOnInit();
+          }
+          else
+            this.catSvc.ErrorMsgBar(element.message,5000)
+          this.isLoading = false
+        })
+      }, error: (e) => {
+        this.isLoading = false
+        this.catSvc.ErrorMsgBar("Error Occurred", 5000)
+        console.warn(e);
+      }
+    })
+  } 
+/*     debugger
     this.inqSvc.UpdateFollowUp(this.selectedFollowUp).subscribe({
       next: (res) => {
 
@@ -199,7 +181,7 @@ dialogRefe :any;
       }
     })
     this.proccessing = false
-  }
+  } */
   Refresh() {
     this.AddMode = true;
     this.EditMode = false;

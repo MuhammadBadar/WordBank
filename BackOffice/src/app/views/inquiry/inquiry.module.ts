@@ -44,12 +44,14 @@ import { ManageServiceOutlineComponent } from './manage-service-out-line/manage-
 import { NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { ServiceListComponent } from './service-list/service-list.component';
+import { EmailComponent } from './email/email.component';
+import { SMSComponent } from './sms/sms.component';
 
 
 
 
 @NgModule({
-  declarations: [ ManageAppointmentComponent,  ManageInquiryComponent,ManageInquiryFollowUpComponent,ManageInquirylistComponent, ManageServiceComponent, ManageServiceOutlineComponent, ServiceListComponent ],
+  declarations: [ ManageAppointmentComponent,  ManageInquiryComponent,ManageInquiryFollowUpComponent,ManageInquirylistComponent, ManageServiceComponent, ManageServiceOutlineComponent, ServiceListComponent, EmailComponent, SMSComponent ],
               
   imports: [
 

@@ -38,7 +38,6 @@ export class ManageInquiryComponent implements OnInit{
     private InqSvc: InquiryService,
     private route: ActivatedRoute,
     private catSvc: CatalogService) {
-    this.InqSvc.selectedInquiry = new InquiryVM
     this.selectedInquiry = new InquiryVM
   }
   ngOnInit(): void {
@@ -94,10 +93,10 @@ export class ManageInquiryComponent implements OnInit{
   }
   GetInquiryById() {
     debugger
-    this.InqSvc.selectedInquiry.id = this.inqId
-    this.InqSvc.SearchInquiry(this.InqSvc.selectedInquiry).subscribe((res: InquiryVM[]) => {
+    this.selectedInquiry.id = this.inqId
+    this.InqSvc.SearchInquiry(this.selectedInquiry).subscribe((res: InquiryVM[]) => {
       this.inquiry = res;
-      this.InqSvc.selectedInquiry = this.inquiry[0]
+      this.selectedInquiry = this.inquiry[0]
     });
   } 
   
@@ -134,17 +133,23 @@ export class ManageInquiryComponent implements OnInit{
   UpdateInquiry() {
     debugger
     this.InqSvc.UpdateInquiry(this.selectedInquiry).subscribe({
-      next: (res) => {
-        this.catSvc.SuccessMsgBar("Inquiry Successfully Updated!", 5000)
-        this.ngOnInit();
+      next: (result) => {
+        result.resultMessages.forEach(element => {
+          if (element.messageType != AppConstants.ERROR_MESSAGE_TYPE) {
+            this.catSvc.SuccessMsgBar(element.message,5000)
+            this.ngOnInit();
+          }
+          else
+            this.catSvc.ErrorMsgBar(element.message,5000)
+          this.isLoading = false
+        })
       }, error: (e) => {
+        this.isLoading = false
         this.catSvc.ErrorMsgBar("Error Occurred", 5000)
         console.warn(e);
-        this.proccessing = false
       }
     })
-    this.proccessing = false
-  }
+  } 
   Refresh() {
     this.AddMode = true;
     this.EditMode = false;

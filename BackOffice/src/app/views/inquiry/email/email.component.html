@@ -1,0 +1,80 @@
+<div class="container-fluid page">
+    <div class="d-flex page_box p-3 mt-2 header-sticky" style="position: sticky;">
+      <div 
+      >Manage Email</div>
+      <div fxFlex fxLayout="row" fxLayoutAlign="end center">
+      <button mat-icon-button style="color:white;margin-top: 0; padding-top: 100;" (click)="dialogRefe.close()"
+        aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    </div>
+  
+    <div class="page_content shadow p-3 position-relative" style="display: flex;">
+      <form #EmailForm="ngForm">
+  
+        <div fxLayout="row" fxLayoutAlign="space-between">
+  
+          <mat-form-field fxFlex="700px" appearance="outline" class="form-group">
+            <mat-label> To </mat-label>
+            <input matInput required name="to" #to="ngModel" [(ngModel)]="selectedEmail.to" placeholder=" To">
+          </mat-form-field>
+  
+        </div>
+  
+        <div>
+          <mat-form-field fxFlex="700px" appearance="outline" class="form-group">
+            <mat-label> Subject </mat-label>
+            <input matInput required name="subject" #subject="ngModel" [(ngModel)]="selectedEmail.subject"
+              placeholder=" Subject">
+          </mat-form-field>
+        </div>
+  
+        <div>
+          <mat-form-field fxFlex="700px" appearance="outline" class="form-group">
+            <mat-label>Message</mat-label>
+            <textarea matInput name="message" [(ngModel)]="selectedEmail.message"></textarea>
+          </mat-form-field>
+        </div>
+  
+  
+        <div fxLayoutAlign="end end">
+
+
+          <div style="margin-top: 10px;">
+
+            <button  cButton class="me-1" style="background-color:#1e293b ;">
+              Send
+            </button>
+  
+  
+            <button  cButton class="me-1" style="background-color:#1e293b ;">
+              Cancel
+            </button>
+         
+          </div>
+          <div>
+              <button mat-icon-button mat-sm-button color="primary" cTooltip="Refresh" cTooltipPlacement="top"
+                  (click)="ngOnInit()">
+                  <mat-icon>autorenew</mat-icon>
+              </button>
+          </div>
+      </div>
+      
+      </form>
+      <div style="margin-top: 5px; margin-left:30px;">
+        <span>
+          <ul>
+            <label for="services">Select Services:</label>
+            <li *ngFor="let val of Services">
+              <mat-checkbox type="checkbox" required>
+                {{ val.serName }}
+              </mat-checkbox>
+            </li>
+  
+          </ul>
+        </span>
+      </div>
+    </div>
+  
+  </div>

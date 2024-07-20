@@ -17,7 +17,7 @@ export class ReceivableService {
 
   constructor(private http: HttpClient) {}
 
-  UpdateReceipt(value: ReceiptVM) {
+  UpdateReceipt(value: ReceiptVM): Observable<any> {
     return this.http.put(Globals.BASE_API_URL + 'Receipt', value);
   }
   
@@ -37,7 +37,7 @@ export class ReceivableService {
     return this.http.delete(Globals.BASE_API_URL + 'Receipt/' + id);
   }
 
-  UpdateCustomer(value: CustomerVM) {
+  UpdateCustomer(value: CustomerVM): Observable<any> {
     return this.http.put(Globals.BASE_API_URL + 'Customer', value);
   }
   
@@ -57,7 +57,7 @@ export class ReceivableService {
     return this.http.delete(Globals.BASE_API_URL + 'Customer/' + id);
   }
 
-  UpdateInvoice(value: CustomerVM) {
+  UpdateInvoice(value: CustomerVM): Observable<any> {
     return this.http.put(Globals.BASE_API_URL + 'Customer', value);
   }
   

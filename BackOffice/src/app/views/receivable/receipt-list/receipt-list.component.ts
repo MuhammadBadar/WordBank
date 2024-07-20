@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NgForm } from '@angular/forms';
 import { ReceivableService } from '../receivable.service';
@@ -9,6 +9,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ReceiptVM } from '../Models/ReceiptVM';
 import { CustomerVM } from '../Models/CustomerVM';
 import { ManageReceiptComponent } from '../manage-receipt/manage-receipt.component';
+import { AppConstants } from 'src/app/app.constants/AppConstants';
+import { tap } from 'rxjs';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-Receipt-list',
@@ -17,21 +20,38 @@ import { ManageReceiptComponent } from '../manage-receipt/manage-receipt.compone
 })
 export class ReceiptListComponent  {
   
-  
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 displayedColumns: string[] = ['customer', 'date', 'number', 'amount', 'comments','nextPayDate', 'isActive', 'actions'];
 isLoading: boolean = false
-dataSource: any
+dataSource: MatTableDataSource<ReceiptVM>;
 Receipt: ReceiptVM[];
 customers:CustomerVM[];
 constructor(
-  private catSvc: CatalogService,
+  public catSvc: CatalogService,
   public dialog:  MatDialog,
+  private cdref: ChangeDetectorRef,
   private route: Router,
   private RcvSvc: ReceivableService) {
 }
 ngOnInit(): void {
-  this.GetReceipt();
+  this.catSvc.totalRecords = AppConstants.DEFAULT_TOTAL_RECORD;
+  this.catSvc.defaultPageSize = AppConstants.DEFAULT_PAGE_SIZE;
+  this.catSvc.pageSizes = AppConstants.PAGE_SIZE_OPTIONS;
 }
+ngAfterViewInit() {
+  this.dataSource.paginator = this.paginator;
+  this.paginator.page
+    .pipe(
+      tap(() => this.GetReceipt())
+    )
+    .subscribe();
+  this.GetReceipt( );
+  this.cdref.detectChanges();
+}
+ngAfterContentChecked() {
+  this.cdref.detectChanges();
+  this.cdref.markForCheck();
+} 
 DeleteReceipt(id: number) {
   Swal.fire({
     title: 'Are you sure?',
@@ -62,7 +82,7 @@ DeleteReceipt(id: number) {
 OpenReceiptDialog() {
   debugger
   var dialogRef = this.dialog.open(ManageReceiptComponent, {
-    disableClose: true, panelClass: 'calendar-form-dialog', width: '1000px', height: '450px'
+    disableClose: true, panelClass: 'calendar-form-dialog', width: '90%', height: '90%'
     , data: {}
   });
   dialogRef.afterClosed()
@@ -72,8 +92,8 @@ OpenReceiptDialog() {
 }
 EditReceipt(id: number) {
   var dialogRef = this.dialog.open(ManageReceiptComponent, {
-    disableClose: true, width: '1000px',
-    height: '450px'
+    disableClose: true, width: '90%',
+    height: '90%'
     , data: { id: id }
   });
   dialogRef.afterClosed()
@@ -82,16 +102,20 @@ EditReceipt(id: number) {
     });
 }
 GetReceipt() {
-  this.isLoading=true
   var Receipts = new ReceiptVM
+  Receipts.pageNo = this.paginator.pageIndex + 1;;
+  Receipts.pageSize = this.paginator.pageSize;
   this.RcvSvc.SearchReceipt(Receipts).subscribe({
     next: (res: ReceiptVM[]) => {
-      this.Receipt = res
-      this.dataSource = new MatTableDataSource(res)
-      this.isLoading=false
+      if (res && res.length > 0) {
+        this.dataSource = new MatTableDataSource(res);
+        this.catSvc.totalRecords = res[0].totalRecords
+      }
+      this.catSvc.isLoading = false
     }, error: (e) => {
-      console.warn(e)
       this.catSvc.ErrorMsgBar("Error Occurred", 4000)
+      console.warn(e);
+      this.catSvc.isLoading = false
     }
   })
 }

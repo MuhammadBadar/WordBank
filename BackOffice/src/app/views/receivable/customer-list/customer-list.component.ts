@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { ManageCustomerComponent } from '../manage-customer/manage-customer.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NgForm } from '@angular/forms';
@@ -8,6 +8,9 @@ import { Router } from '@angular/router';
 import { CatalogService } from '../../catalog/catalog.service';
 import Swal from 'sweetalert2';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { AppConstants } from 'src/app/app.constants/AppConstants';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-customer-list',
@@ -17,17 +20,37 @@ import { MatTableDataSource } from '@angular/material/table';
 export class CustomerListComponent {
   displayedColumns: string[] = ['paymentTerm', 'name', 'email', 'phone', 'address', 'creditLimit', 'isActive', 'actions'];
   isLoading: boolean = false
-  dataSource: any
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  dataSource: MatTableDataSource<CustomerVM>;
   Customers: CustomerVM[];
+  isReadOnly: any;
   constructor(
-    private catSvc: CatalogService,
+    public catSvc: CatalogService,
+    private cdref: ChangeDetectorRef,
     public dialog:  MatDialog,
     private route: Router,
     private RcvSvc: ReceivableService) {
   }
   ngOnInit(): void {
-    this.GetCustomer();
+    this.catSvc.totalRecords = AppConstants.DEFAULT_TOTAL_RECORD;
+    this.catSvc.defaultPageSize = AppConstants.DEFAULT_PAGE_SIZE;
+    this.catSvc.pageSizes = AppConstants.PAGE_SIZE_OPTIONS;
+  
   }
+  ngAfterViewInit() {
+ this.dataSource.paginator = this.paginator; 
+    this.paginator.page
+      .pipe(
+        tap(() => this.GetCustomer())
+      )
+      .subscribe();
+    this.GetCustomer();
+    this.cdref.detectChanges();
+  }
+  ngAfterContentChecked() {
+    this.cdref.detectChanges();
+    this.cdref.markForCheck();
+  } 
   DeleteCustomer(id: number) {
     Swal.fire({
       title: 'Are you sure?',
@@ -58,7 +81,7 @@ export class CustomerListComponent {
   OpenCustomerDialog() {
     debugger
     var dialogRef = this.dialog.open(ManageCustomerComponent, {
-      disableClose: true, panelClass: 'calendar-form-dialog', width: '1000px', height: '450px'
+      disableClose: true, panelClass: 'calendar-form-dialog', width: '90%', height: '90%'
       , data: {}
     });
     dialogRef.afterClosed()
@@ -68,8 +91,8 @@ export class CustomerListComponent {
   }
   EditCustomer(id: number) {
     var dialogRef = this.dialog.open(ManageCustomerComponent, {
-      disableClose: true, width: '1000px',
-      height: '450px'
+      disableClose: true, width: '90%',
+      height: '90%'
       , data: { id: id }
     });
     dialogRef.afterClosed()
@@ -78,17 +101,23 @@ export class CustomerListComponent {
       });
   }
   GetCustomer() {
-    this.isLoading=true
     var Customers = new CustomerVM
+    Customers.pageNo = this.paginator.pageIndex + 1;;
+    Customers.pageSize = this.paginator.pageSize;
+    this.catSvc.isLoading = true
     this.RcvSvc.SearchCustomer(Customers).subscribe({
       next: (res: CustomerVM[]) => {
-        this.Customers = res
-        this.dataSource = new MatTableDataSource(res)
-        this.isLoading=false
+        if (res && res.length > 0) {
+          this.dataSource = new MatTableDataSource(res);
+          this.catSvc.totalRecords = res[0].totalRecords
+        }
+        this.catSvc.isLoading = false
       }, error: (e) => {
-        console.warn(e)
         this.catSvc.ErrorMsgBar("Error Occurred", 4000)
+        console.warn(e);
+        this.catSvc.isLoading = false
       }
+
     })
   }
 }

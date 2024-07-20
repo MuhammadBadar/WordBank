@@ -29,6 +29,7 @@ export class ManageCustomerComponent implements OnInit {
   dialogData: any;
   selectedCustomer: CustomerVM
   proccessing: boolean;
+  isLoading: boolean;
   constructor(
     private RcvSvc: ReceivableService,
     private injector: Injector,
@@ -83,18 +84,18 @@ export class ManageCustomerComponent implements OnInit {
       this.CustomerForm.form.controls['PaymentTermId'].setErrors({ 'incorrect': true })
     if (!this.CustomerForm.invalid) {
       if (this.selectedCustomer.id > 0)
-        this.UpdateCustomer()
+        this.UpdateCustomer() 
       else {
         this.RcvSvc.SaveCustomer(this.selectedCustomer).subscribe({
           next: (result) => {
             debugger
             result.resultMessages.forEach(element => {
               if (element.messageType != AppConstants.ERROR_MESSAGE_TYPE) {
-                this.catSvc.SuccessMsgBar(" Successfully Added", 5000)
+                this.catSvc.SuccessMsgBar(element.message, 5000)
                 this.ngOnInit();
               }
               else
-                this.catSvc.ErrorMsgBar("Please fill all required fields", 5000)
+                this.catSvc.ErrorMsgBar(element.message, 5000)
               this.catSvc.isLoading = false
             });
           }, error: (e) => {
@@ -112,17 +113,23 @@ export class ManageCustomerComponent implements OnInit {
   UpdateCustomer() {
     debugger
     this.RcvSvc.UpdateCustomer(this.selectedCustomer).subscribe({
-      next: (res) => {
-        this.catSvc.SuccessMsgBar("Customer Successfully Updated!", 5000)
-        this.ngOnInit();
+      next: (result) => {
+        result.resultMessages.forEach(element => {
+          if (element.messageType != AppConstants.ERROR_MESSAGE_TYPE) {
+            this.catSvc.SuccessMsgBar(element.message,5000)
+            this.ngOnInit();
+          }
+          else
+            this.catSvc.ErrorMsgBar(element.message,5000)
+          this.isLoading = false
+        })
       }, error: (e) => {
+        this.isLoading = false
         this.catSvc.ErrorMsgBar("Error Occurred", 5000)
         console.warn(e);
-        this.proccessing = false
       }
     })
-    this.proccessing = false
-  }
+  } 
   Refresh() {
     this.AddMode = true;
     this.EditMode = false;

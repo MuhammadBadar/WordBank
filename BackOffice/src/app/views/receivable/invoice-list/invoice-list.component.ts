@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NgForm } from '@angular/forms';
 import { ReceivableService } from '../receivable.service';
@@ -9,6 +9,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { InvoiceVM } from '../Models/InvoiceVM';
 import { CustomerVM } from '../Models/CustomerVM';
 import { ManageInvoiceComponent } from '../manage-invoice/manage-invoice.component';
+import { AppConstants } from 'src/app/app.constants/AppConstants';
+import { tap } from 'rxjs';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-invoice-list',
@@ -17,20 +20,34 @@ import { ManageInvoiceComponent } from '../manage-invoice/manage-invoice.compone
 })
 export class InvoiceListComponent  {
   
-  
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 displayedColumns: string[] = [ 'customer','invDate', 'invNo', 'invAmount', 'comments', 'isActive', 'actions'];
 isLoading: boolean = false
-dataSource: any
+dataSource: MatTableDataSource<InvoiceVM>;
 invoice: InvoiceVM[];
 customers:CustomerVM[];
+  DataSource: any;
 constructor(
-  private catSvc: CatalogService,
+  public catSvc: CatalogService,
   public dialog:  MatDialog,
+  private cdref: ChangeDetectorRef,
   private route: Router,
   private RcvSvc: ReceivableService) {
 }
 ngOnInit(): void {
-  this.GetInvoice();
+  this.catSvc.totalRecords = AppConstants.DEFAULT_TOTAL_RECORD;
+  this.catSvc.defaultPageSize = AppConstants.DEFAULT_PAGE_SIZE;
+  this.catSvc.pageSizes = AppConstants.PAGE_SIZE_OPTIONS;
+}
+ngAfterViewInit() {
+  this.dataSource.paginator = this.paginator;
+  this.paginator.page
+    .pipe(
+      tap(() => this.GetInvoice())
+    )
+    .subscribe();
+  this.GetInvoice( );
+  this.cdref.detectChanges();
 }
 DeleteInvoice(id: number) {
   Swal.fire({
@@ -62,7 +79,7 @@ DeleteInvoice(id: number) {
 OpenInvoiceDialog() {
   debugger
   var dialogRef = this.dialog.open(ManageInvoiceComponent, {
-    disableClose: true, panelClass: 'calendar-form-dialog', width: '1000px', height: '450px'
+    disableClose: true, panelClass: 'calendar-form-dialog', width: '90%', height: '90%'
     , data: {}
   });
   dialogRef.afterClosed()
@@ -72,8 +89,8 @@ OpenInvoiceDialog() {
 }
 EditInvoice(id: number) {
   var dialogRef = this.dialog.open(ManageInvoiceComponent, {
-    disableClose: true, width: '1000px',
-    height: '450px'
+    disableClose: true, width: '90%',
+    height: '90%'
     , data: { id: id }
   });
   dialogRef.afterClosed()
@@ -81,17 +98,26 @@ EditInvoice(id: number) {
       this.GetInvoice()
     });
 }
+ngAfterContentChecked() {
+  this.cdref.detectChanges();
+  this.cdref.markForCheck();
+} 
 GetInvoice() {
-  this.isLoading=true
+  debugger
   var invoices = new InvoiceVM
+  invoices.pageNo = this.paginator.pageIndex + 1;;
+  invoices.pageSize = this.paginator.pageSize;
   this.RcvSvc.SearchInvoice(invoices).subscribe({
     next: (res: InvoiceVM[]) => {
-      this.invoice = res
-      this.dataSource = new MatTableDataSource(res)
-      this.isLoading=false
+      if (res && res.length > 0) {
+        this.dataSource = new MatTableDataSource(res);
+        this.catSvc.totalRecords = res[0].totalRecords
+      }
+      this.catSvc.isLoading = false
     }, error: (e) => {
-      console.warn(e)
       this.catSvc.ErrorMsgBar("Error Occurred", 4000)
+      console.warn(e);
+      this.catSvc.isLoading = false
     }
   })
 }

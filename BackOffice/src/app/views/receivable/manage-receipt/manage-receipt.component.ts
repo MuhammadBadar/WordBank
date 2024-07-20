@@ -27,6 +27,7 @@ export class ManageReceiptComponent implements OnInit {
   proccessing: boolean;
   selectedCustomer: CustomerVM;
   cust: any;
+  isLoading: boolean;
 
   constructor(
     public RcvSvc: ReceivableService,
@@ -41,7 +42,7 @@ export class ManageReceiptComponent implements OnInit {
     this.Refresh()
     if (this.dialogData)
       if (this.dialogData.id != undefined) {
-        this.selectedReceipt.customerId = this.dialogData.id
+        this.selectedReceipt.id = this.dialogData.id
         this.EditMode = true
         this.AddMode = false
         this.GetReceiptById()
@@ -91,11 +92,11 @@ export class ManageReceiptComponent implements OnInit {
           next: (result) => {
             result.resultMessages.forEach(element => {
               if (element.messageType != AppConstants.ERROR_MESSAGE_TYPE) {
-                this.catSvc.SuccessMsgBar("Successfully Added", 5000)
+                this.catSvc.SuccessMsgBar(element.message,5000)
                 this.ngOnInit();
               }
               else
-                this.catSvc.ErrorMsgBar("Error Occurred", 5000)
+                this.catSvc.ErrorMsgBar(element.message, 5000)
               this.catSvc.isLoading = false
             });
           }, error: (e) => {
@@ -113,17 +114,23 @@ export class ManageReceiptComponent implements OnInit {
   UpdateReceipt() {
     debugger
     this.RcvSvc.UpdateReceipt(this.selectedReceipt).subscribe({
-      next: (res) => {
-        this.catSvc.SuccessMsgBar("Receipt Successfully Updated!", 5000)
-        this.ngOnInit();
+      next: (result) => {
+        result.resultMessages.forEach(element => {
+          if (element.messageType != AppConstants.ERROR_MESSAGE_TYPE) {
+            this.catSvc.SuccessMsgBar(element.message,5000)
+            this.ngOnInit();
+          }
+          else
+            this.catSvc.ErrorMsgBar(element.message,5000)
+          this.isLoading = false
+        })
       }, error: (e) => {
+        this.isLoading = false
         this.catSvc.ErrorMsgBar("Error Occurred", 5000)
         console.warn(e);
-        this.proccessing = false
       }
     })
-    this.proccessing = false
-  }
+  } 
   Refresh() {
     this.AddMode = true;
     this.EditMode = false;

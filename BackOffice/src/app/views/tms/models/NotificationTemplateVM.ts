@@ -6,4 +6,5 @@ export class NotificationTemplateVM{
     sms:string;
     id:number;
     isActive: boolean = true;
+  resultMessages: any;
 }

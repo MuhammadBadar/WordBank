@@ -82,7 +82,9 @@ export class LoginComponent  implements OnInit {
         this.lmsSvc.userId = data?.id;
 
         if (data?.result?.succeeded == true) {
+          localStorage.setItem("ClientId", "1");
           localStorage.setItem('userId', this.responseData.id);
+          
           if (data?.showDayStartDialogue == true) {
             this.OpenUserDialog(data);
           }

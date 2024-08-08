@@ -13,6 +13,7 @@ using LMS.DAL.Receivable;
 using System.Data;
 using K4os.Hash.xxHash;
 using LMS.Core.Constants;
+using LMS.Core.Extenstions; 
 
 using static Dapper.SqlMapper;
 
@@ -32,7 +33,7 @@ namespace LMS.Service.Receivable
                     closeConnectionFlag = true;
                 }
                 if (mod.DBoperation == DBoperations.Insert)
-                    mod.Id = _coreDAL.GetnextId(_entity);
+                    mod.Id = _coreDAL.GetNextIdByClient(_entity, mod.ClientId, "ClientId");
 
 
 
@@ -73,9 +74,10 @@ namespace LMS.Service.Receivable
                 #region Search
 
                 string WhereClause = " Where 1=1";
+                if (mod.ClientId != default && mod.ClientId != 0)
+                    WhereClause += $" AND inv.ClientId={mod.ClientId}";
                 if (mod.Id != default && mod.Id != 0)
                     WhereClause += $" AND inv.Id={mod.Id}";
-
                 if (mod.CustomerId != default && mod.CustomerId != 0)
                     WhereClause += $" AND inv.CustomerId={mod.CustomerId}";
                 if (mod.InvDate != default)
@@ -84,13 +86,22 @@ namespace LMS.Service.Receivable
                     WhereClause += $" and inv.InvNo like ''" + mod.InvNo + "''";
                 if (mod.InvAmount != default)
                     WhereClause += $" and inv.InvAmount like ''" + mod.InvAmount + "''";
+
+                if (mod.FromDate.HasValue && mod.FromDate.Value > AppConstants.DEFAULT_DATE)
+                    WhereClause += $" AND InvDate >= ''{mod.FromDate.Value:yyyy-MM-dd} 00:00:00''";
+
+                if (mod.ToDate.HasValue && mod.ToDate.Value > AppConstants.DEFAULT_DATE)
+                    WhereClause += $" AND InvDate <= ''{mod.ToDate.Value:yyyy-MM-dd} 23:59:59''";
+
                 if (mod.Comments != default)
                     WhereClause += $" and inv.Comments like ''" + mod.Comments + "''";
                 if (mod.IsActive != default && mod.IsActive == true)
                     WhereClause += $" AND inv.IsActive=1";
-               
+                if (mod.PageNo != default)
+                    Invoice = _rcvDAL.RCV_Search_Invoice(WhereClause, cmd, mod.PageNo, mod.PageSize);
+                else
                     Invoice = _rcvDAL.RCV_Search_Invoice(WhereClause, cmd);
-
+                 
                 #endregion
             }
             catch (Exception exp)

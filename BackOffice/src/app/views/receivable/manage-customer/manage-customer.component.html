@@ -29,6 +29,8 @@
                     <input matInput required #name="ngModel" name="name" [(ngModel)]="selectedCustomer.name">
                 </mat-form-field>
 
+                
+
             </div>
             <div fxLayout="row" fxLayoutAlign="space-between">
 
@@ -53,18 +55,14 @@
             </div>
             <div fxLayout="row" fxLayoutAlign="space-between">
                 <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
+                    <mat-label>Address</mat-label>
+                    <input matInput #address="ngModel" name="address" [(ngModel)]="selectedCustomer.address">
+                </mat-form-field>
+                <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
                     <mat-label>CreditLimit</mat-label>
                     <input matInput required #creditLimit="ngModel" name="creditLimit" type="number"
                         [(ngModel)]="selectedCustomer.creditLimit">
                 </mat-form-field>
-
-                <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
-                    <mat-label>Address</mat-label>
-                    <input matInput #address="ngModel" name="address" [(ngModel)]="selectedCustomer.address">
-                </mat-form-field>
-
-
-
             </div>
 
 

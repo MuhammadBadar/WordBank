@@ -10,10 +10,6 @@ export class CustomerVM extends BaseDomainVM {
     address?: string
     creditLimit?: number
     paymentTerm?: string
-  static customer: CustomerVM
-    
-    
-  
  
-    
+
 }

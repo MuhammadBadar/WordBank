@@ -14,6 +14,9 @@ using K4os.Hash.xxHash;
 using LMS.Core.Constants;
 
 using static Dapper.SqlMapper;
+using LMS.Core.Entities.Receivable;
+using LMS.DAL.Receivable;
+
 
 namespace LMS.Service.Inquiry
 {
@@ -34,6 +37,8 @@ namespace LMS.Service.Inquiry
                 }
                 if (mod.DBoperation == DBoperations.Insert)
                     mod.Id = _coreDAL.GetnextId(_entity);
+                //if (mod.DBoperation == DBoperations.Insert)
+                //    mod.Id = _coreDAL.GetNextIdByClient(_entity, mod.ClientId, "ClientId");
 
 
 
@@ -74,21 +79,25 @@ namespace LMS.Service.Inquiry
                 #region Search
 
                 string Whereclause = " Where 1=1";
-                if (mod.Id != default)
-                    Whereclause += $" and id={mod.Id}";
-                if (mod.StatusId != default)
-                    Whereclause += $" and StatusId like ''" + mod.StatusId + "''";
+                if (mod.ClientId != default && mod.ClientId != 0)
+                    Whereclause += $" AND follow.ClientId={mod.ClientId}";
+                if (mod.Id != default && mod.Id != 0)
+                    Whereclause += $" AND follow.Id={mod.Id}";
+                if (mod.StatusId != default && mod.StatusId != 0)
+                    Whereclause += $" AND follow.StatusId={mod.StatusId}";
                 if (mod.InquiryId != default)
-                    Whereclause += $" and InquiryId  like ''" + mod.InquiryId + "''";
+                    Whereclause += $" and  follow.InquiryId={mod.InquiryId}";
                 if (mod.Date != default)
-                    Whereclause += $" and Date like ''" + mod.Date + "''";
+                    Whereclause += $" and  follow.Date like ''" + mod.Date + "''";
                 if (mod.NextAppointmentDate != default)
-                    Whereclause += $" and NextAppointmentDate like ''" + mod.NextAppointmentDate + "''";
+                    Whereclause += $" and  follow.NextAppointmentDate like ''" + mod.NextAppointmentDate + "''";
                 if (mod.Comment != default)
-                    Whereclause += $" and Comment like ''" + mod.Comment + "''";
+                    Whereclause += $" and follow. Comment like ''" + mod.Comment + "''";
                 if (mod.IsActive != default && mod.IsActive == true)
-                    Whereclause += $" and IsActive=1";
-
+                    Whereclause += $" and  follow.IsActive=1";
+                if (mod.PageNo != default)
+                    FollowUp = _inqDAL.INQ_Search_FollowUp(Whereclause, cmd, mod.PageNo, mod.PageSize);
+               else
                 FollowUp = _inqDAL.INQ_Search_FollowUp(Whereclause, cmd);
 
                 #endregion

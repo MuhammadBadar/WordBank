@@ -44,6 +44,7 @@ export class ManageServiceComponent {
 
   GetServiceById() {
     var ser = new ServiceVM
+  ser.clientId = +localStorage.getItem("ClientId")
     ser.id = this.selectedService.id
     this.InqSvc.SearchService(ser).subscribe({
       next: (value: ServiceVM[]) => {
@@ -55,7 +56,7 @@ export class ManageServiceComponent {
     })
   }
   SaveService() {
-   
+    this.selectedService.clientId = +localStorage.getItem("ClientId")
     if (!this.ServiceForm.invalid) {
       if (this.selectedService.id > 0)
         this.UpdateService()
@@ -86,6 +87,7 @@ export class ManageServiceComponent {
   }
   UpdateService() {
     debugger
+    this.selectedService.clientId = +localStorage.getItem("ClientId")
     this.InqSvc.UpdateService(this.selectedService).subscribe({
       next: (result) => {
         result.resultMessages.forEach(element => {

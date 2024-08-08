@@ -82,8 +82,10 @@ namespace LMS.Service.Inquiry
                     Whereclause += $" AND SerTitle={mod.SerTitle}";
                 if (mod.IsActive != default && mod.IsActive == true)
                     Whereclause += $" AND IsActive=1";
-
-                Services = _inqDAL.INQ_Search_Services(Whereclause, cmd);
+                if (mod.PageNo != default)
+                    Services = _inqDAL.INQ_Search_Services(Whereclause, cmd, mod.PageNo, mod.PageSize);
+                else
+                    Services = _inqDAL.INQ_Search_Services(Whereclause, cmd);
 
                 #endregion
             }

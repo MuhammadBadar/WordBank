@@ -70,6 +70,7 @@ export class ManageReceiptComponent implements OnInit {
   }
   GetReceiptById() {
     var rcpt = new ReceiptVM
+   rcpt.clientId = +localStorage.getItem("ClientId")
     rcpt.id = this.selectedReceipt.id
     this.RcvSvc.SearchReceipt(rcpt).subscribe({
       next: (value: ReceiptVM[]) => {
@@ -82,6 +83,7 @@ export class ManageReceiptComponent implements OnInit {
   }
   SaveReceipt() {
     debugger
+    this.selectedReceipt.clientId = +localStorage.getItem("ClientId")
     if (this.selectedReceipt.customerId == 0 || this.selectedReceipt.customerId == undefined)
       this.ReceiptForm.form.controls['customerId'].setErrors({ 'incorrect': true })
     if (!this.ReceiptForm.invalid) {

@@ -1,6 +1,6 @@
 <div class="container-fluid page">
   <div class="d-flex page_box p-3 mt-2 header-sticky" style="position: sticky;">
-    <div >
+    <div>
       <H3>Inquiry List</H3>
     </div>
 
@@ -12,60 +12,104 @@
       [routerLink]="['/inquiry/manageinquiry']">Create Inquiry</button>
 
   </div>
-  <div class="example-table-container" style=" overflow-x: scroll;margin-top: 20px; ">
-    <table mat-table #table [dataSource]="dataSource">
-    
-
-      <ng-container matColumnDef="inquiryName" id="inquiryName">
-        <th mat-header-cell *matHeaderCellDef> Name </th>
-        <td mat-cell *matCellDef="let inqlist">
-          <div style="min-width:200px">{{inqlist.inquiryName}} </div>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="inquiryEmail" id="inquiryEmail">
-        <th mat-header-cell *matHeaderCellDef> Email </th>
-        <td mat-cell *matCellDef="let inqlist">
-          <div style="min-width:200px">{{inqlist.inquiryEmail}}</div>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="inquiryCell" id="inquiryCell">
-        <th mat-header-cell *matHeaderCellDef>Cell</th>
-        <td mat-cell *matCellDef="let inqlist">
-          <div style="min-width:300px">{{inqlist.inquiryCell}}</div>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="inquiryComments" id="inquiryComments">
-        <th mat-header-cell *matHeaderCellDef>Comments</th>
-        <td mat-cell *matCellDef="let inqlist">
-          <div style="min-width:500px">{{inqlist.inquiryComments}}</div>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="actions" stickyEnd>
-        <th *matHeaderCellDef> Actions </th>
-        <td *matCellDef="let row">
-          <button mat-icon-button mat-sm-button matTooltip="Edit" (click)="EditInquiry(row)">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button mat-sm-button matTooltip="OpenFollowUp" (click)="OpenFollowUpDialog(row)">
-            <mat-icon>star</mat-icon>
-          </button>
-         <button mat-icon-button mat-sm-button matTooltip="OpenEmail" (click)="OpenEmailDialog(row)" >
-            <mat-icon>email</mat-icon>
-          </button> 
-          <button mat-icon-button mat-sm-button matTooltip="OpenSMS" (click)="OpenSMSDialog(row)">
-            <mat-icon>message</mat-icon>
-          </button> 
-
-          <button mat-icon-button mat-sm-button matTooltip="Delete Inquiry" color="warn"
-            (click)="DeleteInquiry(row.id)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns sticky:true "></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-
+  <div class="search-box" style="margin-top: 20px">
+    <i class="material-icons">search</i>
+    <input type="text" (keyup)="applyFilter($event)" class="search-input" placeholder="Search..." />
   </div>
+  <c-card style="padding: 10px; margin-top: 10px;" class="mat-elevation-z8">
+    <c-card-body style="padding: 10px;border-radius: 20px;    background:linear-gradient(135deg, #0a87a9, #065f78);">
+      <div class="example-table-container">
+        <section class="example-container mat-elevation-z8" tabindex="0" style="border-radius: 5px;">
+          <table mat-table #table [dataSource]="dataSource">
+
+
+            <ng-container matColumnDef="city" id="city">
+              <th mat-header-cell *matHeaderCellDef> CityId </th>
+              <td mat-cell *matCellDef="let inqlist">
+                <div style="min-width:200px">{{inqlist.city}} </div>
+              </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="status" id="status">
+              <th mat-header-cell *matHeaderCellDef> StatusId </th>
+              <td mat-cell *matCellDef="let inqlist">
+                <div style="min-width:200px">{{inqlist.status}} </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="inquiryName" id="inquiryName">
+              <th mat-header-cell *matHeaderCellDef> Name </th>
+              <td mat-cell *matCellDef="let inqlist">
+                <div style="min-width:200px">{{inqlist.inquiryName}} </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="inquiryEmail" id="inquiryEmail">
+              <th mat-header-cell *matHeaderCellDef> Email </th>
+              <td mat-cell *matCellDef="let inqlist">
+                <div style="min-width:200px">{{inqlist.inquiryEmail}}</div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="inquiryCell" id="inquiryCell">
+              <th mat-header-cell *matHeaderCellDef>Cell</th>
+              <td mat-cell *matCellDef="let inqlist">
+                <div style="min-width:200px">{{inqlist.inquiryCell}}</div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="area" id="area">
+              <th mat-header-cell *matHeaderCellDef>Area</th>
+              <td mat-cell *matCellDef="let inqlist">
+                <div style="min-width:200px">{{inqlist.area}}</div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="cnic" id="cnic">
+              <th mat-header-cell *matHeaderCellDef>CNIC</th>
+              <td mat-cell *matCellDef="let inqlist">
+                <div style="min-width:200px">{{inqlist.cnic}}</div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="inquiryComments" id="inquiryComments">
+              <th mat-header-cell *matHeaderCellDef>Comments</th>
+              <td mat-cell *matCellDef="let inqlist">
+                <div style="min-width:200px">{{inqlist.inquiryComments}}</div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="actions" stickyEnd="true">
+              <th mat-header-cell *matHeaderCellDef>Actions
+            
+              </th>
+              <td mat-cell *matCellDef="let row">
+              <div style="text-align: center;">
+                <mat-icon style="color:#13090d ; " (click)="EditInquiry(row)" cTooltip="Edit">edit</mat-icon>
+
+                <mat-icon style="color:#c71f5a ; " (click)="OpenFollowUpDialog(row.id)"
+                  cTooltip="open FollowUp">star</mat-icon>
+
+                <mat-icon style="color:#0594c4 ; " (click)="OpenEmailDialog(row)" cTooltip="Send Email">email</mat-icon>
+
+                <mat-icon style="color:#062935 ; " (click)="OpenSMSDialog(row)"
+                  cTooltip="Send Mesaage">message</mat-icon>
+
+                  <mat-icon style="color:#062935 ; " (click)="OpenServiceChargesDialog(row.id)"
+                  cTooltip="Send Mesaage">ServiceCharges</mat-icon>
+
+
+                <button mat-icon-button mat-sm-button matTooltip="Delete Inquiry" color="warn" style="margin: 0px;"
+                  (click)="DeleteInquiry(row.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+
+              </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns sticky:true "></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+          <mat-paginator [length]="catSvc.totalRecords" [pageSize]="catSvc.defaultPageSize"
+            [pageSizeOptions]="catSvc.pageSizes"></mat-paginator>
+
+        </section>
+      </div>
+    </c-card-body>
+  </c-card>
 </div>

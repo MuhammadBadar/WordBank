@@ -29,10 +29,17 @@ namespace LMS.DAL.Inquiry
                         closeConnection = true;
                     }
                     cmd.CommandText = SPNames.INQ_Manage_Inquiry;
+                cmd.Parameters.AddWithValue("prm_clientId", mod.ClientId);
                 cmd.Parameters.AddWithValue("prm_id", mod.Id);
+                cmd.Parameters.AddWithValue("prm_cityId", mod.CityId);
+                cmd.Parameters.AddWithValue("prm_statusId", mod.StatusId);
+                cmd.Parameters.AddWithValue("prm_compainId", mod.CompainId);
+                cmd.Parameters.AddWithValue("prm_serviceIds", mod.ServiceIds);
                 cmd.Parameters.AddWithValue("prm_inquiryName", mod.InquiryName);
                 cmd.Parameters.AddWithValue("prm_inquiryEmail", mod.InquiryEmail);
                 cmd.Parameters.AddWithValue("prm_inquiryCell", mod.InquiryCell);
+                cmd.Parameters.AddWithValue("prm_area", mod.Area);
+                cmd.Parameters.AddWithValue("prm_cNIC", mod.CNIC);
                 cmd.Parameters.AddWithValue("prm_inquiryComments", mod.InquiryComments);
                 cmd.Parameters.AddWithValue("prm_createdOn", mod.CreatedOn);
                 cmd.Parameters.AddWithValue("prm_createdById", mod.CreatedById);
@@ -55,8 +62,8 @@ namespace LMS.DAL.Inquiry
                         LMSDataContext.CloseMySqlConnection(cmd);
                 }
             }
-            public List<InquiryDE> INQ_Search_Inquiry(string WhereClause, MySqlCommand? cmd)
-            {
+            public List<InquiryDE> INQ_Search_Inquiry(string WhereClause, MySqlCommand? cmd, int PageNo = 1, int PageSize = AppConstants.GRID_MAX_PAGE_SIZE)
+        {
                 bool closeConnection = false;
                 List<InquiryDE> cust = new List<InquiryDE>();
                 try
@@ -69,6 +76,10 @@ namespace LMS.DAL.Inquiry
                     var parameters = new
                     {
                         prm_WhereClause = WhereClause
+                    ,
+                        prm_Start = PageNo
+                    ,
+                        prm_Limit = PageSize
                     ,
 
                     };

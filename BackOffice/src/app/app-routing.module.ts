@@ -120,6 +120,11 @@ const routes: Routes = [
           import('./views/inquiry/inquiry.module').then((m) => m.InquiryModule)
       },
       {
+        path: 'receivable',
+        loadChildren: () =>
+          import('./views/receivable/receivable.module').then((m) => m.ReceivableModule)
+      },
+      {
         path: 'buttons',
         loadChildren: () =>
           import('./views/buttons/buttons.module').then((m) => m.ButtonsModule)

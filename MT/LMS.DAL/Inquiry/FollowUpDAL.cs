@@ -18,7 +18,7 @@ namespace LMS.DAL.Inquiry
         #region DbOperations
         public bool INQ_Manage_FollowUp(FollowUpDE mod, MySqlCommand? cmd)
         {
-            bool closeConnection = false;
+            bool closeConnection = false; 
             try
             {
                 if (cmd == null)
@@ -27,7 +27,8 @@ namespace LMS.DAL.Inquiry
                     closeConnection = true;
                 }
                 cmd.CommandText = SPNames.INQ_Manage_FollowUp;
-                cmd.Parameters.AddWithValue("prm_Id", mod.Id);
+                cmd.Parameters.AddWithValue("prm_clientId", mod.ClientId);
+                cmd.Parameters.AddWithValue("prm_id", mod.Id);
                 cmd.Parameters.AddWithValue("prm_statusId", mod.StatusId);
                 cmd.Parameters.AddWithValue("prm_inquiryId", mod.InquiryId);
                 cmd.Parameters.AddWithValue("prm_date", mod.Date);
@@ -53,10 +54,10 @@ namespace LMS.DAL.Inquiry
                     LMSDataContext.CloseMySqlConnection(cmd);
             }
         }
-        public List<FollowUpDE> INQ_Search_FollowUp(string WhereClause, MySqlCommand? cmd)
+        public List<FollowUpDE> INQ_Search_FollowUp(string WhereClause, MySqlCommand? cmd, int PageNo = 1, int PageSize = AppConstants.GRID_MAX_PAGE_SIZE)
         {
             bool closeConnection = false;
-            List<FollowUpDE> cust = new List<FollowUpDE>();
+            List<FollowUpDE> follow = new List<FollowUpDE>();
             try
             {
                 if (cmd == null)
@@ -68,10 +69,14 @@ namespace LMS.DAL.Inquiry
                 {
                     prm_WhereClause = WhereClause
                 ,
+                    prm_Start = PageNo
+                ,
+                    prm_Limit = PageSize
+                ,
 
                 };
-                cust = cmd.Connection.Query<FollowUpDE>(SPNames.INQ_Search_FollowUp.ToString(), parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
-                return cust;
+                follow = cmd.Connection.Query<FollowUpDE>(SPNames.INQ_Search_FollowUp.ToString(), parameters, commandType: System.Data.CommandType.StoredProcedure).ToList();
+                return follow;
             }
             catch (Exception)
             {

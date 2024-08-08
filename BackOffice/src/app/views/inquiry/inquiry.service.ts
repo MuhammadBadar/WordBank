@@ -6,7 +6,10 @@ import { InquiryVM } from './Models/InquiryVM';
 import {FollowUpVM} from './Models/FollowUpVM'
 import { AppointmentVM } from './Models/AppointmentVM';
 import { ServiceOutlineVM } from './Models/ServiceOutlineVM';
+import {ServiceChargesVM} from './Models/ServiceChargesVM'
 import {ServiceVM} from './Models/ServiceVM';
+import {ServiceCompaignVM} from './Models/ServiceCompaignVM'
+
 
 @Injectable({
   providedIn: 'root'
@@ -135,6 +138,49 @@ export class InquiryService {
     return this.http.delete(Globals.BASE_API_URL + 'ServiceOutline/' + id);
   }
 
+  UpdateServiceCharges(value: ServiceChargesVM): Observable<any> {
+    return this.http.put(Globals.BASE_API_URL + 'ServiceCharges', value);
+  }
+  GetServiceChargesById(id: number): Observable<ServiceChargesVM> {
+    return this.http.get<ServiceChargesVM>(Globals.BASE_API_URL + 'ServiceCharges/' + id).pipe()
+  }
+  SearchServiceCharges(value: ServiceChargesVM): Observable<ServiceChargesVM[]> {
+    return this.http.post<ServiceChargesVM[]>(Globals.BASE_API_URL + 'ServiceCharges/Search', value).pipe();
+  }
+  GetServiceCharges(): Observable<ServiceChargesVM[]> {
+    return this.http.get<ServiceChargesVM[]>(Globals.BASE_API_URL + 'ServiceCharges').pipe();
+  }
+  SaveServiceCharges(value: ServiceChargesVM): Observable<any> {
+    return this.http.post(Globals.BASE_API_URL + 'ServiceCharges', value);
+  }
+  DeleteServiceCharges(id: number) {
+    return this.http.delete(Globals.BASE_API_URL + 'ServiceCharges/' + id);
+  }
+  EditServiceCharges(id: number) {
+    return this.http.delete(Globals.BASE_API_URL + 'ServiceCharges/' + id);
+  }
 
+  
+  UpdateServiceCompaign(value: ServiceCompaignVM): Observable<any> {
+    return this.http.put(Globals.BASE_API_URL + 'ServiceCompaign', value);
+  }
+  GetServiceCompaignById(id: number): Observable<ServiceCompaignVM> {
+    return this.http.get<ServiceCompaignVM>(Globals.BASE_API_URL + 'ServiceCompaign/' + id).pipe()
+  }
+  SearchServiceCompaign(value: ServiceCompaignVM): Observable<ServiceCompaignVM[]> {
+    return this.http.post<ServiceCompaignVM[]>(Globals.BASE_API_URL + 'ServiceCompaign/Search', value).pipe();
+  }
+  GetServiceCompaign(): Observable<ServiceCompaignVM[]> {
+    return this.http.get<ServiceCompaignVM[]>(Globals.BASE_API_URL + 'ServiceCompaign').pipe();
+  }
+  SaveServiceCompaign(value: ServiceCompaignVM): Observable<any> {
+    return this.http.post(Globals.BASE_API_URL + 'ServiceCompaign', value);
+  }
+  DeleteServiceCompaign(id: number) {
+    return this.http.delete(Globals.BASE_API_URL + 'ServiceCompaign/' + id);
+  }
+  EditServiceCompaign(id: number) {
+    return this.http.delete(Globals.BASE_API_URL + 'ServiceCompaign/' + id);
+  }
 
 }

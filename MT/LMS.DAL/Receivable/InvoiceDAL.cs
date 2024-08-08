@@ -55,7 +55,7 @@ namespace LMS.DAL.Receivable
                     LMSDataContext.CloseMySqlConnection(cmd);
             }
         }
-        public List<InvoiceDE> RCV_Search_Invoice(string WhereClause, MySqlCommand? cmd)
+        public List<InvoiceDE> RCV_Search_Invoice(string WhereClause, MySqlCommand? cmd, int PageNo = 1, int PageSize = AppConstants.GRID_MAX_PAGE_SIZE)
         {
             bool closeConnection = false;
             List<InvoiceDE> inv = new List<InvoiceDE>();
@@ -69,6 +69,10 @@ namespace LMS.DAL.Receivable
                 var parameters = new
                 {
                     prm_WhereClause = WhereClause
+                ,
+                    prm_Start = PageNo
+                ,
+                    prm_Limit = PageSize
                 ,
 
                 };

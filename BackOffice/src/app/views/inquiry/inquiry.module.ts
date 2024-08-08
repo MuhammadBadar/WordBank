@@ -17,7 +17,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
@@ -46,12 +45,13 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { ServiceListComponent } from './service-list/service-list.component';
 import { EmailComponent } from './email/email.component';
 import { SMSComponent } from './sms/sms.component';
-
-
+import{ServiceChargesComponent} from './manage_service-charges/service-charges.component'
+import{ServiceCompaignComponent} from './service-compaign/service-compaign.component'
 
 
 @NgModule({
-  declarations: [ ManageAppointmentComponent,  ManageInquiryComponent,ManageInquiryFollowUpComponent,ManageInquirylistComponent, ManageServiceComponent, ManageServiceOutlineComponent, ServiceListComponent, EmailComponent, SMSComponent ],
+  declarations: [ ManageAppointmentComponent,  ManageInquiryComponent,ManageInquiryFollowUpComponent,ManageInquirylistComponent, ManageServiceComponent, ManageServiceOutlineComponent, ServiceListComponent, EmailComponent,
+     SMSComponent ,ServiceChargesComponent,ServiceCompaignComponent],
               
   imports: [
 

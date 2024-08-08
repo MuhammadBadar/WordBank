@@ -18,7 +18,11 @@ namespace LMS.Service.Inquiry
 
         public FollowUpDE ManageFollowUp(FollowUpDE mod);
         public List<FollowUpDE> SearchFollowUp(FollowUpDE mod);
+        public ServiceChargesDE ManageServiceCharges(ServiceChargesDE mod);
+        public List<ServiceChargesDE> SearchServiceCharges(ServiceChargesDE mod);
 
+        public ServiceCompaignDE ManageServiceCompaign(ServiceCompaignDE mod);
+        public List<ServiceCompaignDE> SearchServiceCompaign(ServiceCompaignDE mod);
 
 
 

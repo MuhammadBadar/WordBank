@@ -50,7 +50,7 @@ namespace LMS.DAL.Receivable
                     LMSDataContext.CloseMySqlConnection(cmd);
             }
         }
-        public List<CustomerDE> RCV_Search_Customer (string WhereClause, MySqlCommand? cmd)
+        public List<CustomerDE> RCV_Search_Customer (string WhereClause, MySqlCommand? cmd, int PageNo = 1, int PageSize = AppConstants.GRID_MAX_PAGE_SIZE )
         {
             bool closeConnection = false;
             List<CustomerDE> cust = new List<CustomerDE>();
@@ -65,7 +65,11 @@ namespace LMS.DAL.Receivable
                 {
                     prm_WhereClause = WhereClause
                 ,
-               
+                    prm_Start = PageNo
+                ,
+                    prm_Limit = PageSize
+                ,
+
                 };
                 cust = cmd.Connection.Query<CustomerDE>(SPNames.RCV_Search_Customer.ToString(), parameters, commandType: CommandType.StoredProcedure).ToList();
                 return cust;

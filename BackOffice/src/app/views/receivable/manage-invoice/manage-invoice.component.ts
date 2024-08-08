@@ -68,6 +68,7 @@ export class ManageInvoiceComponent implements OnInit {
 
   GetInvoiceById() {
     var inv = new InvoiceVM
+    this.selectedInvoice.clientId = +localStorage.getItem("ClientId")
     inv.id = this.selectedInvoice.id
     this.RcvSvc.SearchInvoice(inv).subscribe({
       next: (value: InvoiceVM[]) => {
@@ -80,6 +81,7 @@ export class ManageInvoiceComponent implements OnInit {
   }
   SaveInvoice() {
     debugger
+    this.selectedInvoice.clientId = +localStorage.getItem("ClientId")
     if (this.selectedInvoice.customerId == 0 || this.selectedInvoice.customerId == undefined)
       this.InvoiceForm.form.controls['customerId'].setErrors({ 'incorrect': true })
     if (!this.InvoiceForm.invalid) {

@@ -62,7 +62,8 @@
             <div fxLayout="row" fxLayoutAlign="space-between">
                 <mat-form-field fxFlex="100%" appearance="outline" class="form-group">
                     <mat-label>Comments</mat-label>
-                    <input matInput #comments="ngModel" name="comments" [(ngModel)]="selectedInvoice.comments">
+                    <textarea matInput name="comments" [(ngModel)]="selectedInvoice.comments"></textarea>
+                    
                 </mat-form-field>
             </div>
             <mat-checkbox name="isActive" [(ngModel)]="selectedInvoice.isActive">Is Active</mat-checkbox>

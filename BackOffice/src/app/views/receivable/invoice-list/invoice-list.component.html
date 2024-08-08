@@ -1,17 +1,51 @@
 <div class="container-fluid page">
     <div class="d-flex page_box p-3 mt-2">Invoice List</div>
     <div class="page_content shadow p-3 position-relative">
-       
+
         <div class="pull-right" style="text-align:end; margin-top: 20px;">
-            <button  style="color: white;" mat-raised-button class="mb-05" matTooltip="Create new Invoice" color="primary"
-                (click)="OpenInvoiceDialog()">Create Invoice
+            <button style="color: white;" mat-raised-button class="mb-05" matTooltip="Create new Invoice"
+                color="primary" (click)="OpenInvoiceDialog()">Create Invoice
             </button>
+        </div>
+        <div class="search-box" style="margin-top: 20px">
+            <i class="material-icons">search</i>
+            <input type="text" (keyup)="applyFilter($event)" class="search-input" placeholder="Search..." />
+        </div>
+        <div style="margin-top: 20px">
+            <div fxLayout="row" fxLayoutAlign="space-between">
+                <mat-form-field appearance="outline" fxFlex="48%">
+                    <mat-label>Select Customer</mat-label>
+                    <mat-select name="customer" [(ngModel)]="invoices.customer">
+                        <mat-option [value]="0">--Please Select--</mat-option>
+                        <mat-option *ngFor="let customer of customers" [value]="customer.id">
+                            {{customer.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="48%" appearance="outline">
+                    <mat-label>Start Date</mat-label>
+                    <input matInput [matDatepicker]="startDateDP" placeholder="Start Date" name="startDate" [(ngModel)]="fromDate">
+                    <mat-datepicker-toggle matSuffix [for]="startDateDP"></mat-datepicker-toggle>
+                    <mat-datepicker #startDateDP></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field fxFlex="48%" appearance="outline">
+                    <mat-label>To Date</mat-label>
+                    <input matInput [matDatepicker]="endDateDP" placeholder="End Date" name="endDate" [(ngModel)]="toDate">
+                    <mat-datepicker-toggle matSuffix [for]="endDateDP"></mat-datepicker-toggle>
+                    <mat-datepicker #endDateDP></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="pull-right" style="text-align:end;">
+                <button style="color: white;" mat-raised-button class="mb-05" matTooltip="GetInvoice" color="primary" (click)="GetInvoice()">
+                    <mat-icon>check_circle</mat-icon> Search
+                </button>
+            </div>
         </div>
         <c-card style="padding: 10px; margin-top: 10px;" class="mat-elevation-z8">
             <c-card-body
                 style="padding: 10px;border-radius: 20px;    background:linear-gradient(135deg, #0a87a9, #065f78);">
                 <div class="example-table-container">
-                    <section class="example-container mat-elevation-z8" tabindex="0" style="border-radius: 5px;">
+                     <section class="example-container mat-elevation-z8" tabindex="0" style="border-radius: 5px;">
                         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                             <ng-container matColumnDef="customer">
                                 <th mat-header-cell *matHeaderCellDef> CustomerName </th>
@@ -62,9 +96,11 @@
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                         </table>
-                        <mat-paginator [length]="catSvc.totalRecords" [pageSize]="catSvc.defaultPageSize" [pageSizeOptions]="catSvc.pageSizes"></mat-paginator>
-                    
-                    </section>
+                        <mat-paginator [length]="catSvc.totalRecords" [pageSize]="catSvc.defaultPageSize"
+                            [pageSizeOptions]="catSvc.pageSizes"></mat-paginator>
+
+                    </section> 
+                   
                 </div>
             </c-card-body>
         </c-card>
@@ -76,3 +112,5 @@
         </div>
     </div>
 </div>
+
+  

@@ -2,10 +2,11 @@
 import { CatalogService } from 'src/app/views/catalog/catalog.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { LMSService } from './../lms.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { FiscalYearVM } from './../Models/FiscalYearVM';
 import Swal from 'sweetalert2';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-manage-fiscal-year',
@@ -16,8 +17,8 @@ export class ManageFiscalYearComponent implements OnInit {
  
   
  
-  
-    fisyColumns: string[] = [ 'yearCode', 'yearDesc', 'yearDateFrom', 'yearDateTo', 'isActiveYear','isActive', 'actions'];
+  @ViewChild('FisyForm', { static: true }) FisyForm!: NgForm;
+    fisyColumns: string[] = [ 'yearCode', 'yearDesc', 'yearDateFrom', 'yearDateTo', 'isActiveYear', 'actions'];
     AddMode: boolean = true
     EditMode: boolean = false
     Add: boolean = true;
@@ -28,6 +29,7 @@ export class ManageFiscalYearComponent implements OnInit {
     selectedFiscalYear: FiscalYearVM
    // topics?: TopicVM[]
     fisy: FiscalYearVM[]
+  Edit: boolean;
     constructor(
       private lmsSvc: LMSService,
       private catSvc: CatalogService) {
@@ -62,6 +64,23 @@ export class ManageFiscalYearComponent implements OnInit {
         console.warn(err)
         this.catSvc.ErrorMsgBar("Error Occurred", 5000)
       },
+    })
+  }
+  GetFiscalYearForEdit(id: number) {
+    this.selectedFiscalYear = new FiscalYearVM;
+    this.selectedFiscalYear.id = id
+    console.warn(this.selectedFiscalYear);
+    this.lmsSvc.SearchFiscalYear(this.selectedFiscalYear).subscribe({
+      next: (res: FiscalYearVM[]) => {
+        this.fisy = res;
+        console.warn(this.fisy);
+        this.selectedFiscalYear = this.fisy[0]
+        this.Edit = true;
+        this.Add = false;
+      }, error: (e) => {
+        this.catSvc.ErrorMsgBar("Error Occurred", 5000)
+        console.warn(e);
+      }
     })
   }
   EditFiscalYear(fisy: FiscalYearVM) {
@@ -100,7 +119,7 @@ export class ManageFiscalYearComponent implements OnInit {
           next: (data) => {
             Swal.fire(
               'Deleted!',
-              'Topic has been deleted.',
+              'FiscalYear has been deleted.',
               'success'
             )
             this.Refresh();

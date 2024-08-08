@@ -10,5 +10,7 @@ export class ReceiptVM extends BaseDomainVM {
     comments?:string
     nextPayDate?:Date
     customer?: string
+    fromDate?: Date
+   toDate?: Date
 }
 

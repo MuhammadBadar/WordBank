@@ -18,6 +18,8 @@ import { MatSortModule } from '@angular/material/sort';
 //import { QuillConfigModule } from 'ngx-quill/config';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { InquiryModule } from './views/inquiry/inquiry.module';
+import { ReceivableModule } from './views/receivable/receivable.module';
+
 import {
   PERFECT_SCROLLBAR_CONFIG,
   PerfectScrollbarConfigInterface,
@@ -92,15 +94,10 @@ const APP_CONTAINERS = [
     PerfectScrollbarModule,
     NgxMatNativeDateModule,
     MatNativeDateModule,
-   // QuillConfigModule.forRoot({
-    //   modules: {
-    //     syntax: true,
-        
-    //   }
-    // }),
     MatDialogModule,
    RouterModule, 
     InquiryModule,
+    ReceivableModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatMomentDateModule,

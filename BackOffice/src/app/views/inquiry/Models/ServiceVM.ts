@@ -1,10 +1,8 @@
-export class ServiceVM {
+import { BaseDomainVM } from "../../catalog/Models/BaseDomainVM"
 
-    id?: number
+export class ServiceVM extends BaseDomainVM {
+
     serName?: string
     serTitle?: string
-    isActive: boolean
-  push: any
-  indexOf: any
-  splice: any
+ 
  }

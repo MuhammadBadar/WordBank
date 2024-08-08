@@ -1,5 +1,5 @@
 
-import { Component, Injector, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { InquiryVM } from '../Models/InquiryVM';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -11,6 +11,12 @@ import { CatalogService } from '../../catalog/catalog.service';
 import { ManageInquiryComponent } from '../manage-inquiry/manage-inquiry.component';
 import { EmailComponent } from '../email/email.component';
 import { SMSComponent } from '../sms/sms.component';
+import { AppConstants } from 'src/app/app.constants/AppConstants';
+import { MatPaginator } from '@angular/material/paginator';
+import { tap } from 'rxjs';
+import { EnumTypeVM } from '../../security/models/EnumTypeVM';
+import { SettingsVM } from '../../catalog/Models/SettingsVM';
+import { ServiceChargesComponent } from '../manage_service-charges/service-charges.component';
 
 
 @Component({
@@ -21,24 +27,43 @@ import { SMSComponent } from '../sms/sms.component';
 export class ManageInquirylistComponent {
 
  
-  displayedColumns = ['inquiryName', 'inquiryEmail', 'inquiryCell', 'inquiryComments', 'actions']
+  displayedColumns = ['city','status','inquiryName', 'inquiryEmail', 'inquiryCell','area','cnic', 'inquiryComments', 'actions']
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  dataSource= new MatTableDataSource<InquiryVM>([]);
   isLoading: boolean = false
-  dataSource: any
   inquiry: InquiryVM[];
   EditMode: boolean;
   AddMode: boolean;
   selectedInquiry: InquiryVM;
+
   constructor(
-    private catSvc: CatalogService,
+    public catSvc: CatalogService,
     public dialog:  MatDialog,
+    private cdref: ChangeDetectorRef,
     private route: Router,
     private InqSvc: InquiryService) {
       this.selectedInquiry = new InquiryVM
   }
   ngOnInit(): void {
-   
-    this.GetInquiry();
+    this.catSvc.totalRecords = AppConstants.DEFAULT_TOTAL_RECORD;
+    this.catSvc.defaultPageSize = AppConstants.DEFAULT_PAGE_SIZE;
+    this.catSvc.pageSizes = AppConstants.PAGE_SIZE_OPTIONS;
   }
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.paginator.page
+      .pipe(
+        tap(() => this.GetInquiry())
+      )
+      .subscribe();
+    this.GetInquiry( );
+    this.cdref.detectChanges();
+  }
+  ngAfterContentChecked() {
+    this.cdref.detectChanges();
+    this.cdref.markForCheck();
+  } 
+ 
   DeleteInquiry(id: number) {
     Swal.fire({
       title: 'Are you sure?',
@@ -74,11 +99,23 @@ export class ManageInquirylistComponent {
    
 
   }
-  OpenFollowUpDialog(inquiry) {
+  OpenFollowUpDialog(inquiryId: number) {
     debugger
     var dialogRef = this.dialog.open(ManageInquiryFollowUpComponent, {
       disableClose: true, panelClass: 'calendar-form-dialog',  width: '90%', height: '90%'
-      , data: {id:inquiry.id}
+      , data: {id:inquiryId}
+    });
+    dialogRef.afterClosed()
+      .subscribe((res) => {
+        this.GetInquiry()
+      });
+  }
+ 
+  OpenServiceChargesDialog(inquiryId: number) {
+    debugger
+    var dialogRef = this.dialog.open(ServiceChargesComponent, {
+      disableClose: true, panelClass: 'calendar-form-dialog',  width: '90%', height: '90%'
+      , data: {id:inquiryId}
     });
     dialogRef.afterClosed()
       .subscribe((res) => {
@@ -109,18 +146,27 @@ export class ManageInquirylistComponent {
   }
 
   GetInquiry() {
-    this.isLoading=true
-    var Inquirys = new InquiryVM
-    this.InqSvc.SearchInquiry(Inquirys).subscribe({
+    var inq = new InquiryVM
+    inq.clientId = +localStorage.getItem("ClientId")
+    inq.pageNo = this.paginator.pageIndex + 1;;
+    inq.pageSize = this.paginator.pageSize;
+    this.InqSvc.SearchInquiry(inq).subscribe({
       next: (res: InquiryVM[]) => {
-        this.inquiry = res
-        this.dataSource = new MatTableDataSource(res)
-        this.isLoading=false
+        if (res && res.length > 0) {
+          this.dataSource = new MatTableDataSource(res);
+          this.catSvc.totalRecords = res[0].totalRecords
+        }
+        this.catSvc.isLoading = false
       }, error: (e) => {
-        console.warn(e)
         this.catSvc.ErrorMsgBar("Error Occurred", 4000)
+        console.warn(e);
+        this.catSvc.isLoading = false
       }
     })
+  }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }
 

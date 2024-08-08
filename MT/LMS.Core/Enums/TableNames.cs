@@ -58,5 +58,21 @@
         Invoice,
         Services,
         Appointment,
+        customer,
+        RCV_Receipt,
+     
+        RCV_Customer,
+        RCV_Invoice,
+        INQ_FollowUp,
+        INQ_Inquiry,
+        INQ_ServiceOutline,
+        inq_serviceoutline,
+        inq_Services,
+        CTL_AdditionalParameter,
+        ctl_additionalparameter,
+        NOT_Notification_Template,
+        NOT_Notificationtemplate,
+        INQ_ServiceCharges,
+        INQ_ServiceCompaign,
     }
 }

@@ -19,7 +19,7 @@ namespace LMS.Service.Receivable
     public partial class RecevService
     {
 
-        public CustomerDE ManageCustomer(CustomerDE mod)
+        public CustomerDE ManageCustomer(CustomerDE mod) 
         {
             bool closeConnectionFlag = false;
             try
@@ -31,7 +31,7 @@ namespace LMS.Service.Receivable
                     closeConnectionFlag = true;
                 }
                 if (mod.DBoperation == DBoperations.Insert)
-                    mod.Id = _coreDAL.GetnextId(_entity);
+                    mod.Id = _coreDAL.GetNextIdByClient(_entity, mod.ClientId, "ClientId");
 
 
 
@@ -75,10 +75,8 @@ namespace LMS.Service.Receivable
 
                 if (mod.Id != default && mod.Id != 0)
                     WhereClause += $" AND cust.Id={mod.Id}";
-
                 if (mod.ClientId != default && mod.ClientId != 0)
                     WhereClause += $" AND cust.ClientId={mod.ClientId}";
-               
                 if (mod.PaymentTermId != default)
                     WhereClause += $" AND cust.PaymentTermId={mod.PaymentTermId}";
                 if (mod.Name != default)
@@ -93,8 +91,10 @@ namespace LMS.Service.Receivable
                     WhereClause += $" and cust.CreditLimit like ''" + mod.CreditLimit + "''";
                 if (mod.IsActive != default && mod.IsActive == true)
                     WhereClause += $" AND cust.IsActive=1";
-                
-                    customer = _rcvDAL.RCV_Search_Customer(WhereClause, cmd);
+                if (mod.PageNo != default)
+                    customer = _rcvDAL.RCV_Search_Customer(WhereClause, cmd, mod.PageNo, mod.PageSize);
+              else
+                customer = _rcvDAL.RCV_Search_Customer(WhereClause, cmd);
 
                 #endregion
             }
@@ -110,6 +110,7 @@ namespace LMS.Service.Receivable
             }
             return customer;
         }
+
 
     }
 }

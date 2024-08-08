@@ -28,6 +28,7 @@ namespace LMS.DAL.Inquiry
                     closeConnection = true;
                 }
                 cmd.CommandText = SPNames.INQ_Manage_Services;
+                cmd.Parameters.AddWithValue("prm_clientId", mod.ClientId);
                 cmd.Parameters.AddWithValue("prm_id", mod.Id);
                 cmd.Parameters.AddWithValue("prm_serName", mod.SerName);
                 cmd.Parameters.AddWithValue("prm_serTitle", mod.SerTitle);
@@ -53,7 +54,7 @@ namespace LMS.DAL.Inquiry
         }
 
   
-        public List<ServicesDE> INQ_Search_Services(string WhereClause, MySqlCommand? cmd)
+        public List<ServicesDE> INQ_Search_Services(string WhereClause, MySqlCommand? cmd, int PageNo = 1, int PageSize = AppConstants.GRID_MAX_PAGE_SIZE)
         {
             bool closeConnection = false;
             List<ServicesDE> cust = new List<ServicesDE>();
@@ -67,6 +68,10 @@ namespace LMS.DAL.Inquiry
                 var Parameters = new
                 {
                     prm_WhereClause = WhereClause
+                ,
+                    prm_Start = PageNo
+                ,
+                    prm_Limit = PageSize
                 ,
 
                 };

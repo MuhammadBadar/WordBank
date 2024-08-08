@@ -1,47 +1,61 @@
 <div class="container-fluid page">
   <div class="d-flex page_box p-3 mt-2">Service List</div>
   <div class="page_content shadow p-3 position-relative">
-     
-      <div class="pull-right" style="text-align:end; margin-top: 20px;">
-          <button  style="color: white;" mat-raised-button class="mb-05" matTooltip="Create new Invoice" color="primary"
-              (click)="OpenServiceDialog()">Create Service
-          </button>
-      </div>
-    <div class="example-table-container" style=" overflow-x: scroll;margin-top: 20px; ">
-      <table mat-table #table [dataSource]="dataSource">
-      
-        <ng-container matColumnDef="serName" id="serName">
-            <th mat-header-cell *matHeaderCellDef> Service Name </th>
-            <td mat-cell *matCellDef="let serlist">
-              <div style="min-width:200px">{{serlist.serName}} </div>
-            </td>
-          </ng-container>
-  
-        <ng-container matColumnDef="serTitle" id="serTitle">
-            <th mat-header-cell *matHeaderCellDef>Title</th>
-            <td mat-cell *matCellDef="let serlist">
-              <div style="min-width:300px">{{serlist.serTitle}}</div>
-            </td>
-          </ng-container>
-        <ng-container matColumnDef="actions" stickyEnd>
-          <th *matHeaderCellDef> Actions </th>
-          <td *matCellDef="let row">
-            <button mat-icon-button mat-sm-button matTooltip="Edit" (click)="EditService(row.id)">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button mat-sm-button matTooltip="OpenServiceOutline" (click)="OpenServiceOutlineDialog(row.id)">
-              <mat-icon>circle</mat-icon>
-            </button>
-  
-            <button mat-icon-button mat-sm-button matTooltip="Delete Service" color="warn"
-              (click)="DeleteService(row.id)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns sticky:true "></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-  
+
+    <div class="pull-right" style="text-align:end; margin-top: 20px;">
+      <button style="color: white;" mat-raised-button class="mb-05" matTooltip="Create new Invoice" color="primary"
+        (click)="OpenServiceDialog()">Create Service
+      </button>
     </div>
+    <div class="search-box" style="margin-top: 20px">
+      <i class="material-icons">search</i>
+      <input type="text" (keyup)="applyFilter($event)" class="search-input" placeholder="Search..." />
+    </div>
+    <c-card style="padding: 10px; margin-top: 10px;" class="mat-elevation-z8">
+      <c-card-body style="padding: 10px;border-radius: 20px;    background:linear-gradient(135deg, #0a87a9, #065f78);">
+        <div class="example-table-container">
+          <section class="example-container mat-elevation-z8" tabindex="0" style="border-radius: 5px;">
+            <table mat-table #table [dataSource]="dataSource">
+
+              <ng-container matColumnDef="serName" >
+                <th mat-header-cell *matHeaderCellDef> Service Name </th>
+                <td mat-cell *matCellDef="let serlist" style="min-width:200px"> {{serlist.serName}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="serTitle" id="serTitle">
+                <th mat-header-cell *matHeaderCellDef>Title</th>
+                <td mat-cell *matCellDef="let serlist" style="min-width:200px">{{serlist.serTitle}}
+              </ng-container>
+              <ng-container matColumnDef="actions" stickyEnd="true">
+                <th mat-header-cell *matHeaderCellDef>Actions
+                </th>
+                <td mat-cell *matCellDef="let row">
+                <div style="text-align: center;">
+
+                  <mat-icon style="color:#0a0a0a ; " (click)="EditService(row.id)" cTooltip="Edit">edit</mat-icon>
+                  <mat-icon style="color:#63426b ; " (click)="OpenServiceOutlineDialog(row.id)"
+                    cTooltip="OpenServiceOutline">circle</mat-icon>
+                    <mat-icon style="color:#ccc0cf ; " (click)="OpenServiceCompaignDialog(row.id)"
+                    cTooltip="OpenServiceCompaign">star</mat-icon>
+                  <button mat-icon-button mat-sm-button matTooltip="Delete Service" color="warn"
+                    (click)="DeleteService(row.id)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+
+
+                </div>
+                </td>
+              </ng-container>
+         
+              <tr mat-header-row *matHeaderRowDef="displayedColumns sticky:true "></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [length]="catSvc.totalRecords" [pageSize]="catSvc.defaultPageSize"
+              [pageSizeOptions]="catSvc.pageSizes"></mat-paginator>
+
+          </section>
+        </div>
+      </c-card-body>
+    </c-card>
   </div>
+</div>

@@ -9,4 +9,7 @@ export class InvoiceVM extends BaseDomainVM {
     invAmount?: DoubleRange
     comments?: string
    customer?: string
+   fromDate?: Date
+   toDate?: Date
+  filter: any
 }

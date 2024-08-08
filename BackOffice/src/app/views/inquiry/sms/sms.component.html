@@ -15,22 +15,16 @@
 
       <div fxLayout="row" fxLayoutAlign="space-between">
 
-        <mat-form-field fxFlex="70%" appearance="outline" class="form-group">
+        <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
           <mat-label> Phone </mat-label>
           <input matInput required name="phone" #phone="ngModel" [(ngModel)]="selectedSMS.phone" placeholder=" Phone">
         </mat-form-field>
 
-
-
-      </div>
-
-
-
-      <div>
-        <mat-form-field fxFlex="100%" appearance="outline" class="form-group">
+        <mat-form-field fxFlex="48%" appearance="outline" class="form-group">
           <mat-label>Message</mat-label>
           <textarea matInput name="message" [(ngModel)]="selectedSMS.message"></textarea>
         </mat-form-field>
+
       </div>
 
 

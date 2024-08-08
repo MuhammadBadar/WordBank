@@ -9,8 +9,10 @@ import { CatalogService } from '../../catalog/catalog.service';
 import Swal from 'sweetalert2';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { AppConstants } from 'src/app/app.constants/AppConstants';
 import { tap } from 'rxjs';
+import { AppConstants } from 'src/app/app.constants/AppConstants';
+import { EnumTypeVM } from '../../security/models/EnumTypeVM';
+import { SettingsVM } from '../../catalog/Models/SettingsVM';
 
 @Component({
   selector: 'app-customer-list',
@@ -21,36 +23,57 @@ export class CustomerListComponent {
   displayedColumns: string[] = ['paymentTerm', 'name', 'email', 'phone', 'address', 'creditLimit', 'isActive', 'actions'];
   isLoading: boolean = false
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  dataSource: MatTableDataSource<CustomerVM>;
+  dataSource=new MatTableDataSource<CustomerVM>([]);
   Customers: CustomerVM[];
-  isReadOnly: any;
+  PaymentTerms: SettingsVM[];
+  AddMode: boolean;
+  EditMode: boolean;
+  proccessing: boolean;
+  selectedCustomer: CustomerVM;
+  customers: CustomerVM;
   constructor(
     public catSvc: CatalogService,
     private cdref: ChangeDetectorRef,
     public dialog:  MatDialog,
-    private route: Router,
-    private RcvSvc: ReceivableService) {
+    private RcvSvc: ReceivableService) { this.customers = new CustomerVM();
   }
   ngOnInit(): void {
     this.catSvc.totalRecords = AppConstants.DEFAULT_TOTAL_RECORD;
     this.catSvc.defaultPageSize = AppConstants.DEFAULT_PAGE_SIZE;
     this.catSvc.pageSizes = AppConstants.PAGE_SIZE_OPTIONS;
-  
+    this.GetSettings(EnumTypeVM.PaymentTermId);
+   
   }
   ngAfterViewInit() {
- this.dataSource.paginator = this.paginator; 
+    this.dataSource.paginator = this.paginator;
     this.paginator.page
       .pipe(
         tap(() => this.GetCustomer())
       )
       .subscribe();
-    this.GetCustomer();
+    this.GetCustomer( );
     this.cdref.detectChanges();
   }
   ngAfterContentChecked() {
     this.cdref.detectChanges();
     this.cdref.markForCheck();
   } 
+  GetSettings(etype: EnumTypeVM) {
+    var setting = new SettingsVM()
+    setting.enumTypeId = etype
+    setting.isActive = true
+    this.catSvc.SearchSettings(setting).subscribe({
+      next: (res: SettingsVM[]) => {
+        if (etype === EnumTypeVM.PaymentTermId) {
+          this.PaymentTerms = res;
+        }
+      }, error: (e) => {
+        alert("t");
+        this.catSvc.ErrorMsgBar("Error Occurred", 4000)
+        console.warn(e);
+      }
+    })
+  }
   DeleteCustomer(id: number) {
     Swal.fire({
       title: 'Are you sure?',
@@ -100,24 +123,38 @@ export class CustomerListComponent {
         this.GetCustomer()
       });
   }
+  
   GetCustomer() {
-    var Customers = new CustomerVM
-    Customers.pageNo = this.paginator.pageIndex + 1;;
-    Customers.pageSize = this.paginator.pageSize;
-    this.catSvc.isLoading = true
-    this.RcvSvc.SearchCustomer(Customers).subscribe({
-      next: (res: CustomerVM[]) => {
-        if (res && res.length > 0) {
-          this.dataSource = new MatTableDataSource(res);
-          this.catSvc.totalRecords = res[0].totalRecords
+      debugger
+      var customer = new CustomerVM();
+      customer.paymentTerm =this.customers.paymentTerm
+      customer.id= this.customers.id
+      customer.clientId = +localStorage.getItem("ClientId")
+      customer.pageNo = this.paginator.pageIndex + 1;;
+      customer.pageSize = this.paginator.pageSize;
+      this.RcvSvc.SearchCustomer(customer).subscribe({
+        next: (res: CustomerVM[]) => { 
+          if (res && res.length > 0) {
+            this.dataSource = new MatTableDataSource(res);
+            this.catSvc.totalRecords = res[0].totalRecords
+          }
+          this.catSvc.isLoading = false
+        }, error: (e) => {
+          this.catSvc.ErrorMsgBar("Error Occurred", 4000)
+          console.warn(e);
+          this.catSvc.isLoading = false
         }
-        this.catSvc.isLoading = false
-      }, error: (e) => {
-        this.catSvc.ErrorMsgBar("Error Occurred", 4000)
-        console.warn(e);
-        this.catSvc.isLoading = false
-      }
-
-    })
+      })
+    }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+  Refresh() {
+    this.AddMode = true;
+    this.EditMode = false;
+    this.proccessing = false
+    this.selectedCustomer = new CustomerVM();
+  }
+
 }

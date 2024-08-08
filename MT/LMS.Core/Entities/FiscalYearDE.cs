@@ -10,7 +10,7 @@ namespace LMS.Core.Entities
     public class FiscalYearDE : BaseDomain
 
     {
-        public int  ClientId { get; set; }
+       
         public string? YearCode { get; set; }
 
         public string? YearDesc { get; set; }

@@ -17,5 +17,11 @@ namespace LMS.Core.Entities.Inquiry
         public string? Comment { get; set; }
 
 
+        #region View Properties
+
+        public string? FollowUpStatuses { get; set; }
+
+
+        #endregion
     }
 }

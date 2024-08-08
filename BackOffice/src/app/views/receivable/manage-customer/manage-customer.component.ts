@@ -69,6 +69,7 @@ export class ManageCustomerComponent implements OnInit {
   }
   GetCustomerById() {
     var cust = new CustomerVM
+  cust.clientId = +localStorage.getItem("ClientId")
     cust.id = this.selectedCustomer.id
     this.RcvSvc.SearchCustomer(cust).subscribe({
       next: (value: CustomerVM[]) => {
@@ -80,6 +81,7 @@ export class ManageCustomerComponent implements OnInit {
     })
   }
   SaveCustomer() {
+    this.selectedCustomer.clientId = +localStorage.getItem("ClientId")
     if (this.selectedCustomer.paymentTermId == 0 || this.selectedCustomer.paymentTermId == undefined)
       this.CustomerForm.form.controls['PaymentTermId'].setErrors({ 'incorrect': true })
     if (!this.CustomerForm.invalid) {
@@ -134,7 +136,7 @@ export class ManageCustomerComponent implements OnInit {
     this.AddMode = true;
     this.EditMode = false;
     this.proccessing = false
-    this.selectedCustomer = new CustomerVM
+    this.selectedCustomer = new CustomerVM();
   }
 
 }

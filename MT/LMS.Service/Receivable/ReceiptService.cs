@@ -11,7 +11,7 @@ using NLog;
 using LMS.Core.Entities.Receivable;
 using LMS.DAL.Receivable;
 using System.Data;
-using K4os.Hash.xxHash;
+using LMS.Core.Extenstions;
 using LMS.Core.Constants;
 
 using static Dapper.SqlMapper;
@@ -32,7 +32,7 @@ namespace LMS.Service.Receivable
                     closeConnectionFlag = true;
                 }
                 if (mod.DBoperation == DBoperations.Insert)
-                    mod.Id = _coreDAL.GetnextId(_entity);
+                    mod.Id = _coreDAL.GetNextIdByClient(_entity, mod.ClientId, "ClientId");
 
 
 
@@ -73,13 +73,18 @@ namespace LMS.Service.Receivable
                 #region Search
 
                 string WhereClause = " Where 1=1";
+                if (mod.ClientId != default && mod.ClientId != 0)
+                    WhereClause += $" AND rcpt.ClientId={mod.ClientId}";
                 if (mod.Id != default && mod.Id != 0)
                     WhereClause += $" AND rcpt.Id={mod.Id}";
-
                 if (mod.CustomerId != default && mod.CustomerId != 0)
                     WhereClause += $" AND rcpt.CustomerId={mod.CustomerId}";
                 if (mod.Date != default)
                     WhereClause += $" and rcpt.Date like ''" + mod.Date + "''";
+                if (mod.FromDate.HasValue && mod.FromDate.Value > AppConstants.DEFAULT_DATE)
+                    WhereClause += $" AND Date >= ''{mod.FromDate.Value:yyyy-MM-dd} 00:00:00''";
+                if (mod.ToDate.HasValue && mod.ToDate.Value > AppConstants.DEFAULT_DATE)
+                    WhereClause += $" AND Date <= ''{mod.ToDate.Value:yyyy-MM-dd} 23:59:59''";
                 if (mod.Number != default)
                     WhereClause += $" and rcpt.Number like ''" + mod.Number + "''";
                 if (mod.Amount != default)
@@ -90,7 +95,9 @@ namespace LMS.Service.Receivable
                     WhereClause += $" and rcpt.NextPayDate like ''" + mod.NextPayDate + "''";
                 if (mod.IsActive != default && mod.IsActive == true)
                     WhereClause += $" AND rcpt.IsActive=1";
-               
+                if (mod.PageNo != default)
+                    Receipt = _rcvDAL.RCV_Search_Receipt(WhereClause, cmd, mod.PageNo, mod.PageSize);
+                else
                     Receipt = _rcvDAL.RCV_Search_Receipt(WhereClause, cmd);
 
                 #endregion
